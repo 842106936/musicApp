@@ -30,15 +30,16 @@ import SearchList from './components/SearchMusic/SearchList.vue'
 import PlayList from './components/PlayList.vue'
 import RankList from './components/RankList.vue'
 
-import Mine from './components/Main/Mine.vue'
-import Music from './components/Main/Music.vue'
-import Dynamic from './components/Main/Dynamic.vue'
+import Mine from './components/main/Mine.vue'
+import Music from './components/main/Music.vue'
+import Dynamic from './components/main/Dynamic.vue'
 
-import recommend from './components/Main/MusicPart/recommend.vue'
-import sheet from './components/Main/MusicPart/sheet.vue'
-import radio from './components/Main/MusicPart/radio.vue'
-import rank from './components/Main/MusicPart/rank.vue'
+import recommend from './components/main/MusicPart/recommend.vue'
+import sheet from './components/main/MusicPart/sheet.vue'
+import radio from './components/main/MusicPart/radio.vue'
+import rank from './components/main/MusicPart/rank.vue'
 
+import historyList from './components/main/MinePart/HistoryList.vue'
 
 /*开启debug模式*/
 Vue.config.debug = true
@@ -130,6 +131,11 @@ const router = new Router({
     name:'RankList',
     path: '/RankList/:idx',
     component: RankList
+  },
+  {
+    name:'historyList',
+    path: '/historyList',
+    component: historyList
   }]
 })
 

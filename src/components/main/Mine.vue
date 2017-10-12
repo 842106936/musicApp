@@ -10,7 +10,7 @@
         </router-link>
       </li>
       <li>
-        <router-link to="List">
+        <router-link to="/HistoryList">
           <i class="fa-play-circle"></i>
           <b>最近播放</b>
           <em></em>

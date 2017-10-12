@@ -41,6 +41,11 @@ export default {
           if(res.data.code == 200){
             this.$store.dispatch('id',res.data.account.id);
             this.$store.dispatch('userName',res.data.profile.nickname);
+            if(window.localStorage){
+                localStorage.setItem("id", res.data.account.id);
+            }else{
+                Cookie.write("id", res.data.account.id);
+            }
             this.$router.push({ path: '/Main' });
           }else{
             Toast(res.data.msg);
