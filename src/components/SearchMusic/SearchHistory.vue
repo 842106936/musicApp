@@ -42,9 +42,9 @@ export default{
   },
   created() {
     this.his = window.sessionStorage.getItem("historys");
-    var tempArr=this.his.split(',');
-    var returnArr=new Array();
-    var i,len=tempArr.length;
+    let tempArr=this.his.split(',');
+    let returnArr=new Array();
+    let i,len=tempArr.length;
     for(i=0;i<len;i++){
         returnArr.push(tempArr[i]);
     }

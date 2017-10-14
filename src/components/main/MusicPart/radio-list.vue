@@ -35,10 +35,10 @@ export default{
   props:['title','id'],
   methods: {
     getRadioLists() {
-      var params = {
+      let params = {
         type: this.id
       }
-      var url = this.HOST + '/dj/recommend/type';
+      let url = this.HOST + '/dj/recommend/type';
       this.axios.get(url,{params}).then(res => {
         this.radioLists = res.data.djRadios;
       });

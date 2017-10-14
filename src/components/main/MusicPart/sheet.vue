@@ -78,11 +78,11 @@ export default{
   },
   methods: {
     getallSheets() {
-      var params = {
+      let params = {
         cat : this.cat,
         limit : this.limit
       }
-      var url = this.HOST + '/top/playlist/highquality';
+      let url = this.HOST + '/top/playlist/highquality';
       this.axios.get(url,{params}).then(res => {
         this.$store.dispatch('allSheets',res.data.playlists);
         this.banner= res.data.playlists[0];

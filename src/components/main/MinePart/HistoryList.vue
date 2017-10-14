@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import {mapState ,mapMutations ,mapActions} from 'vuex';
 import { Actionsheet } from 'mint-ui';
 
 export default {
@@ -44,12 +45,15 @@ export default {
     this.getHistorys();
   },
   methods: {
+    ...mapActions([
+      'MusicPlay'
+    ]),
     getHistorys() {
-      var params = {
+      let params = {
         uid: window.localStorage.getItem("id"),
         type: 1
       }
-      var url = this.HOST + '/user/record';
+      let url = this.HOST + '/user/record';
       this.axios.get(url,{params}).then(res => {
         this.historys = res.data.weekData;
       });

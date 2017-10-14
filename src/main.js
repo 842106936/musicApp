@@ -26,7 +26,6 @@ import Search from './components/SearchMusic/Search.vue'
 import SearchHistory from './components/SearchMusic/SearchHistory.vue'
 import SearchList from './components/SearchMusic/SearchList.vue'
 
-
 import PlayList from './components/PlayList.vue'
 import RankList from './components/RankList.vue'
 
@@ -134,7 +133,7 @@ const router = new Router({
   },
   {
     name:'historyList',
-    path: '/historyList',
+    path: '/HistoryList',
     component: historyList
   }]
 })
@@ -165,29 +164,29 @@ router.afterEach(() => {
 
 Vue.prototype.HOST = '/api'
 
-Vue.prototype.MusicPlay = function(id) {
-  let getMusicDetail = function(id) {
-    var params = {
-      ids : id
-    };
-    var url = '/api/song/detail';
-    return axios.get(url,{params});
-  };
-  let getMusicUrl = function(id) {
-    var params = {
-      id : id
-    };
-    var url = '/api/music/url';
-    return axios.get(url,{params});
-  };
-  axios.all([getMusicDetail(id),getMusicUrl(id)]).then(axios.spread((Detail, Url) => {
-    this.$store.dispatch('musicDetail', Detail.data);
-    this.$store.dispatch('musicUrl', Url.data.data[0].url);
-    this.$store.dispatch('musicPlay', true);
-  })).catch(error => {
-    console.log(error);
-  });
-}
+// Vue.prototype.MusicPlay = function(id) {
+//   let getMusicDetail = (id) =>  {
+//     var params = {
+//       ids : id
+//     };
+//     var url = '/api/song/detail';
+//     return axios.get(url,{params});
+//   };
+//   let getMusicUrl = (id) => {
+//     var params = {
+//       id : id
+//     };
+//     var url = '/api/music/url';
+//     return axios.get(url,{params});
+//   };
+//   axios.all([getMusicDetail(id),getMusicUrl(id)]).then(axios.spread((Detail, Url) => {
+//      this.$store.dispatch('musicDetail', Detail.data);
+//      this.$store.dispatch('musicUrl', Url.data.data[0].url);
+//     // store.dispatch('MusicPlay')
+//   })).catch(error => {
+//     console.log(error);
+//   });
+// }
 
 new Vue({
   el: '#app',

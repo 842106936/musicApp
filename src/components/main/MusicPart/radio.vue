@@ -44,7 +44,7 @@ export default{
   },
   methods: {
     getRadioCategorys() {
-      var url = this.HOST + '/dj/catelist';
+      let url = this.HOST + '/dj/catelist';
       this.axios.get(url).then(res => {
         this.$store.dispatch('radioCategorys',res.data.categories);
       });

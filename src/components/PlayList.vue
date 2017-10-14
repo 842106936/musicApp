@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import {mapState ,mapMutations ,mapActions} from 'vuex';
 import { Actionsheet } from 'mint-ui';
 
 export default {
@@ -85,11 +86,14 @@ export default {
       this.getPlaylist();
   },
   methods: {
+    ...mapActions([
+      'MusicPlay'
+    ]),
     getPlaylist() {
-      var params = {
+      let params = {
         id: this.id
       }
-      var url = this.HOST + '/playlist/detail';
+      let url = this.HOST + '/playlist/detail';
       this.axios.get(url,{params}).then(res => {
         this.banner = res.data.playlist;
         this.playlist = res.data.playlist.tracks;

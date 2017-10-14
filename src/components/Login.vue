@@ -32,11 +32,11 @@ export default {
     },
     methods: {
       onSubmit() {
-        var params = {
+        let params = {
           phone : this.phone,
           password : this.password
         }
-        var url = this.HOST + '/login/cellphone';
+        let url = this.HOST + '/login/cellphone';
         this.axios.get(url,{params}).then(res => {
           if(res.data.code == 200){
             this.$store.dispatch('id',res.data.account.id);

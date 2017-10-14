@@ -37,6 +37,11 @@ export default {
     ...mapState([
       "searchList"
     ])
+  },
+  mthods: {
+    ...mapActions([
+      'MusicPlay'
+    ])
   }
 }
 </script>

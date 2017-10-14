@@ -23,10 +23,10 @@ export default {
   props:["idx"],
   methods: {
     getRanks() {
-      var params = {
+      let params = {
         idx: this.idx
       }
-      var url = this.HOST + '/top/list';
+      let url = this.HOST + '/top/list';
       this.axios.get(url,{params}).then(res => {
         this.img = res.data.result.coverImgUrl;
         this.ranks = res.data.result.tracks;

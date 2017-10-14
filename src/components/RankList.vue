@@ -89,16 +89,19 @@ export default {
   },
   filters: {
     rankChange(num,index) {
-      var rk = num - index;
+      let rk = num - index;
       return rk ?  rk : 0;
     }
   },
   methods: {
+    ...mapActions([
+      'MusicPlay'
+    ]),
     getRanks() {
-      var params = {
+      let params = {
         idx: this.idx
       }
-      var url = this.HOST + '/top/list';
+      let url = this.HOST + '/top/list';
       this.axios.get(url,{params}).then(res => {
         this.banner = res.data.result;
         this.ranks = res.data.result.tracks;

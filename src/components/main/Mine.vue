@@ -102,20 +102,20 @@ export default{
   },
   methods: {
     getUserInfo() {
-      var params = {
+      let params = {
         uid: this.$store.state.id
       }
-      var url = this.HOST + '/user/detail';
+      let url = this.HOST + '/user/detail';
       this.axios.get(url,{params}).then(res => {
         this.playlistCount = res.data.profile.playlistCount;
         this.follows = res.data.profile.follows;
       });
     },
     getPlayList() {
-      var params = {
+      let params = {
         uid: this.$store.state.id
       }
-      var url = this.HOST + '/user/playlist';
+      let url = this.HOST + '/user/playlist';
       this.axios.get(url,{params}).then(res => {
         this.playlist = res.data.playlist;
       });

@@ -65,13 +65,17 @@ export default {
     ])
   },
   methods: {
+    ...mapActions([
+      'MusicPlay'
+    ]),
     getMusics() {
-      var url = this.HOST + '/recommend/songs';
+      const url = this.HOST + '/recommend/songs';
       this.axios.get(url).then(res => {
         this.$store.dispatch('musics',res.data.recommend);
         this.banner = res.data.recommend[0].album;
       });
     }
+
   }
 }
 </script>

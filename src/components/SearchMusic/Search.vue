@@ -76,10 +76,10 @@ export default{
   },
   methods: {
     loadRes() {
-      var params = {
+      let params = {
         keywords : this.text
       }
-      var url = this.HOST + '/search/suggest';
+      let url = this.HOST + '/search/suggest';
       this.axios.get(url,{params}).then(res => {
         this.suggest.albums = res.data.result.albums;
         this.suggest.artists = res.data.result.artists;
@@ -96,13 +96,13 @@ export default{
         this.$store.dispatch("historys", this.his);
       }
       this.searchShow = false;
-      var params = {
+      let params = {
         keywords:val,
         limit:30,
         offset:0,
         type:1
       }
-      var url = this.HOST + '/search';
+      let url = this.HOST + '/search';
       this.axios.get(url,{params}).then(res => {
         this.$store.dispatch("searchList", res.data.result.songs);
         this.$router.push({ path: '/Search/SearchList' });
