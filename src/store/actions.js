@@ -33,7 +33,11 @@ export default {
     commit('musicInfo', data)
   },
   autoNextMusic({state, commit, dispatch}) {
-    state.songIndex < state.playerList.List.length ? state.songIndex += 1 : state.songIndex = 0;
+    if(state.songIndex < state.playerList.List.length-1){
+      state.songIndex += 1
+    }else{
+      state.songIndex = 0;
+    }
     commit('musicInfo', state.playerList.List[state.songIndex]);
   },
   tracksPlayerList({state,commit}, id) {
