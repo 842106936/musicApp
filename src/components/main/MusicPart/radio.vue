@@ -1,14 +1,14 @@
 <template>
 <div class="radio">
 
-  <div class="part-nav">
+  <!-- <div class="part-nav">
     <el-row>
       <el-col :span="12" v-for="nav in radioNavs" :key="nav.title">
         <i class="iconfont" :class="nav.icon"></i>
         <b>{{nav.title}}</b>
       </el-col>
     </el-row>
-  </div>
+  </div> -->
   <div v-for="radios in radioCategorys">
     <v-radios class="part-radio" :title="radios.name" :id="radios.id"></v-radios>
   </div>

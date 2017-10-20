@@ -3,7 +3,7 @@
 
     <div class="music-list">
       <ul>
-        <li v-for="item in searchList" :key="item.id" @click="MusicPlay(item.id)">
+        <li v-for="item in searchList" :key="item.id" @click="MusicPlay(item)">
           <div class="info">
             <p class="name"><b>{{item.name}}</b><em>{{item.alias[0]}}</em></p>
             <p class="author">{{item.artists[0].name}}&nbsp;-&nbsp;{{item.album.name}}</p>
@@ -35,13 +35,19 @@ export default {
   },
   computed: {
     ...mapState([
-      "searchList"
+      'searchList','musicInfo'
     ])
   },
-  mthods: {
-    ...mapActions([
-      'MusicPlay'
-    ])
+  methods: {
+    MusicPlay(item) {
+      let arr = {
+        title : item.name,
+        author : item.artists[0].name,
+        id : item.id,
+        pic : item.album.picUrl
+      }
+      this.$store.dispatch('musicInfo', arr);
+    }
   }
 }
 </script>

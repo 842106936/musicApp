@@ -5,12 +5,14 @@
       <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
 
-    <mt-cell title="播放全部">
-      <i name="icon" class="fa-play-circle"></i>
-    </mt-cell>
+    <div @click="addListToPlayerList">
+      <mt-cell title="播放全部">
+        <i name="icon" class="fa-play-circle"></i>
+      </mt-cell>
+    </div>
     <div class="music-list">
       <ul>
-        <li v-for="item in historys" :key="item.song.id" @click="MusicPlay(item.song.id)">
+        <li v-for="item in historys" :key="item.song.id" @click="MusicPlay(item)">
           <div class="info">
             <p class="name"><b>{{item.song.name}}</b></p>
             <p class="author">{{item.song.ar[0].name}}</p>
@@ -38,25 +40,53 @@ export default {
         {name:'下一首播放',method:''},
         {name:'收藏到歌单',method:''},
         {name:'下载',method:''}
-      ]
+      ],
+      List:[]
     }
   },
   created() {
     this.getHistorys();
   },
+  computed: {
+    ...mapState([
+      'musicInfo',"playerList"
+    ])
+  },
   methods: {
-    ...mapActions([
-      'MusicPlay'
-    ]),
+    MusicPlay(item) {
+      let arr = {
+        title : item.song.name,
+        author : item.song.ar[0].name,
+        id : item.song.id,
+        pic : item.song.al.picUrl
+      }
+      this.$store.dispatch('musicInfo', arr);
+    },
     getHistorys() {
-      let params = {
+      const params = {
         uid: window.localStorage.getItem("id"),
         type: 1
       }
-      let url = this.HOST + '/user/record';
+      const url = this.HOST + '/user/record';
       this.axios.get(url,{params}).then(res => {
         this.historys = res.data.weekData;
+
+        for(var i = 0; i < this.historys.length; i++){
+          let obj = {
+            title : this.historys[i].name,
+            author : this.historys[i].ar[0].name,
+            id : this.historys[i].id,
+            pic : this.historys[i].al.picUrl
+          }
+          this.List.push(obj);
+        }
       });
+    },
+    addListToPlayerList(){
+      if(this.playerList.id.indexOf(this.id) == -1){
+        this.$store.commit('addListID', this.id);
+        this.$store.commit('addListToPlayerList', this.List);
+      }
     }
   }
 }

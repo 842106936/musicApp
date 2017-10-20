@@ -197,7 +197,7 @@ export default{
       let url = this.HOST + '/banner';
       this.axios.get(url).then(res => {
         console.log(res.data)
-        this.$store.dispatch('banners',res.data.banners);
+        this.$store.commit('banners',res.data.banners);
       });
     },
     // 格式化请求
@@ -205,7 +205,7 @@ export default{
     getSheets() {
       let url = this.HOST + '/personalized';
       this.axios.get(url).then(res => {
-        this.$store.dispatch('sheets',res.data.result);
+        this.$store.commit('sheets',res.data.result);
         this.$nextTick(() => {
           this._initScroll();
         })
@@ -214,7 +214,7 @@ export default{
     getSoles() {
       let url = this.HOST + '/personalized/privatecontent';
       this.axios.get(url).then(res => {
-        this.$store.dispatch('soles',res.data.result);
+        this.$store.commit('soles',res.data.result);
       });
     },
     getNewmusics() {
@@ -224,25 +224,25 @@ export default{
       }
       let url = this.HOST + '/top/album';
       this.axios.get(url,{params}).then(res => {
-        this.$store.dispatch('newmusics',res.data.albums);
+        this.$store.commit('newmusics',res.data.albums);
       });
     },
     getMVs() {
       let url = this.HOST + '/personalized/mv';
       this.axios.get(url).then(res => {
-        this.$store.dispatch('mvs',res.data.result);
+        this.$store.commit('mvs',res.data.result);
       });
     },
     getColumns() {
       let url = this.HOST + '/program/recommend';
       this.axios.get(url).then(res => {
-        this.$store.dispatch('columns',res.data.programs);
+        this.$store.commit('columns',res.data.programs);
       });
     },
     getRadios() {
       let url = this.HOST + '/personalized/djprogram';
       this.axios.get(url).then(res => {
-        this.$store.dispatch('radios',res.data.result);
+        this.$store.commit('radios',res.data.result);
       });
     },
     loadTop() {

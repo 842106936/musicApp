@@ -63,7 +63,9 @@ export default{
   watch: {
     searchTxt() {
       this.text = this.searchTxt;
-      this.loadRes();
+      if(this.text != ''){
+        this.loadRes();
+      }
     },
     text() {
       this.$store.dispatch("searchTxt",this.text);

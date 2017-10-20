@@ -25,12 +25,8 @@ export default {
         password:''
       }
     },
-    computed: {
-      ...mapState([
-        "id","userName"
-      ])
-    },
     methods: {
+      //(localStorage) 用户ID，登录名 340074702
       onSubmit() {
         let params = {
           phone : this.phone,
@@ -39,8 +35,6 @@ export default {
         let url = this.HOST + '/login/cellphone';
         this.axios.get(url,{params}).then(res => {
           if(res.data.code == 200){
-            this.$store.dispatch('id',res.data.account.id);
-            this.$store.dispatch('userName',res.data.profile.nickname);
             if(window.localStorage){
                 localStorage.setItem("id", res.data.account.id);
             }else{

@@ -7,9 +7,6 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const state = {
-  //Login 用户ID，登录名
-  id:'',
-  userName:'',
   //Main 跳转方向
   viewDirection:'',
   //Music二级导航
@@ -28,13 +25,18 @@ const state = {
   radioCategorys:[],
   //List
   musics:[],
-  //aplayer
-  musicDetail:[],
-  musicUrl:[],
   //search
-  searchTxt:'',
-  historys:[],
-  searchList:[]
+  searchTxt:'', //检索词
+  historys:[], //搜索历史
+  searchList:[], //热门搜索
+  //aplayer
+  musicInfo:[], //当前播放音乐信息
+  playerMode:'Recycle', //播放模式 Recycle循环播放，Random随机播放，Single单曲循环
+  songIndex: 0, //当前播放歌曲在播放列表中的索引
+  playerList:{
+    id:[], //已加入播放列表的歌单id
+    List:[] //播放列表
+  } 
 }
 
 

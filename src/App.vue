@@ -24,6 +24,6 @@ export default{
 <style lang="less" rel="stylesheet/less" scoped>
 #app{
   padding-bottom:50px;
-  //background:#f7f7f7;
 }
+
 </style>

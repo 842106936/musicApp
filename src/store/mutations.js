@@ -1,27 +1,17 @@
-//更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。
+//更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。 this.$store.commit()
 //Vuex 中的 mutation 非常类似于事件：
 //每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
 //这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数
-const USERID = 'USERID'
-const USERNAME = 'USERNAME'
-const BANNER = 'BANNER'
-const MUSIC_DETAIL = 'MUSIC_DETAIL'
-const MUSIC_URL = 'MUSIC_URL'
+const MUSICINFO = 'MUSICINFO'
 
 export default {
-  [USERID](state, data) {
-    state.id = data;
-  },
-  [USERNAME](state, data) {
-    state.userName = data;
-  },
   viewDirection(state, data) {
     state.viewDirection = data;
   },
   navIndex(state, data) {
     state.navIndex = data;
   },
-  [BANNER](state, data) {
+  banners(state, data) {
     state.banners = data;
   },
   sheets(state, data) {
@@ -63,10 +53,50 @@ export default {
   searchList(state, data) {
     state.searchList = data;
   },
-  [MUSIC_DETAIL](state, data) {
-    state.musicDetail = data
+  musicInfo(state, data) {
+    state.musicInfo = data
   },
-  [MUSIC_URL](state, data) {
-    state.musicUrl = data
+  //将单曲加入播放列表
+  addItemToPlayList(state, songs) {
+    state.playerList.List.unshift(songs)
+  },
+  //将单曲加入播放列表（如果播放列表中含有该歌曲，将该歌曲的索引变为0）
+  sortItemToPlayList(state, i) {
+    return new Promise((resolve, reject) => {
+      state.playerList.List.unshift(state.playerList.List[i]);
+      resolve();
+    })
+    .then(() => {
+      state.playerList.List.splice(i+1, 1);
+    })
+  },
+  //将单曲从播放列表移除
+  removeItemFromPlayList(state, index) {
+    state.playerList.List.splice(index, 1);
+  },
+  //清空播放列表
+  trashPlayerList(state) {
+    state.playerList = {
+      id:[],
+      List:[]
+    };
+  },
+  //存储加入播放列表歌单的Id，以判断歌单是否重复
+  addListID(state,id) {
+    state.playerList.id.push(id);
+  },
+  //将歌单加入播放列表
+  addListToPlayerList(state, Lists) {
+    state.playerList.List = Lists.concat(state.playerList.List);
+  },
+  //播放器播放列表的播放模式
+  changePlayerMode(state) {
+    if(state.playerMode == 'Recycle'){
+      state.playerMode = 'Random';
+    }else if(state.playerMode == 'Random'){
+      state.playerMode = 'Single';
+    }else if(state.playerMode == 'Single'){
+      state.playerMode = 'Recycle';
+    }
   }
 }

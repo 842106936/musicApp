@@ -16,12 +16,14 @@
       </div>
     </div>
 
-    <mt-cell title="播放全部">
-      <i name="icon" class="fa-play-circle"></i>
-    </mt-cell>
+    <div @click="addListToPlayerList">
+      <mt-cell title="播放全部">
+        <i name="icon" class="fa-play-circle"></i>
+      </mt-cell>
+    </div>
     <div class="music-list">
       <ul>
-        <li v-for="item in musics" :key="item.id" @click="MusicPlay(item.id)">
+        <li v-for="item in musics" :key="item.id" @click="MusicPlay(item)">
           <div class="info">
             <p class="name"><b>{{item.name}}</b><em>{{item.alias[0]}}</em></p>
             <p class="author">{{item.artists[0].name}}&nbsp;-&nbsp;{{item.album.name}}</p>
@@ -49,7 +51,8 @@ export default {
         {name:'收藏到歌单',method:''},
         {name:'下载',method:''}
       ],
-      banner:[]
+      banner:[],
+      List:[]
     }
   },
   created() {
@@ -61,21 +64,42 @@ export default {
   },
   computed: {
     ...mapState([
-      "musics"
+      "musics","musicInfo","playerList"
     ])
   },
   methods: {
-    ...mapActions([
-      'MusicPlay'
-    ]),
+    MusicPlay(item) {
+      let arr = {
+        title : item.name,
+        author : item.artists[0].name,
+        id : item.id,
+        pic : item.album.picUrl
+      }
+      this.$store.dispatch('musicInfo', arr);
+    },
     getMusics() {
       const url = this.HOST + '/recommend/songs';
       this.axios.get(url).then(res => {
         this.$store.dispatch('musics',res.data.recommend);
         this.banner = res.data.recommend[0].album;
-      });
-    }
 
+        for(var i = 0; i < this.musics.length; i++){
+          let obj = {
+            title : this.musics[i].name,
+            author : this.musics[i].artists[0].name,
+            id : this.musics[i].id,
+            pic : this.musics[i].album.picUrl
+          }
+          this.List.push(obj);
+        }
+      });
+    },
+    addListToPlayerList(){
+      if(this.playerList.id.indexOf(this.id) == -1){
+        this.$store.commit('addListID', this.id);
+        this.$store.commit('addListToPlayerList', this.List);
+      }
+    }
   }
 }
 </script>

@@ -45,7 +45,7 @@
     </mt-cell>
     <div class="list">
       <ul>
-        <li v-for="(item,index) in playlist" v-if="item.creator.userId == $store.state.id" :key="item.id">
+        <li v-for="(item,index) in playlist" v-if="item.creator.userId == userId" :key="item.id">
           <router-link :to="{ name: 'PlayList', params: { id: item.id }}">
             <div class="info">
               <div class="list-image">
@@ -67,7 +67,7 @@
     </mt-cell>
     <div class="list">
       <ul>
-        <li v-for="(item,index) in playlist" v-if="item.creator.userId != $store.state.id" :key="item.id">
+        <li v-for="(item,index) in playlist" v-if="item.creator.userId != userId" :key="item.id">
           <router-link :to="{ name: 'PlayList', params: { id: item.id }}">
             <div class="info">
               <div class="list-image">
@@ -87,10 +87,13 @@
 </template>
 
 <script>
+import {mapState ,mapMutations ,mapActions} from 'vuex';
+
 export default{
   name:'Mine',
   data() {
     return {
+      userId:window.localStorage.getItem('id'),
       playlistCount:'',
       follows:'',
       playlist:[]
@@ -100,10 +103,15 @@ export default{
     this.getUserInfo();
     this.getPlayList();
   },
+  computed: {
+    ...mapState([
+      "pid"
+    ])
+  },
   methods: {
     getUserInfo() {
       let params = {
-        uid: this.$store.state.id
+        uid: window.localStorage.getItem("id")
       }
       let url = this.HOST + '/user/detail';
       this.axios.get(url,{params}).then(res => {
@@ -113,7 +121,7 @@ export default{
     },
     getPlayList() {
       let params = {
-        uid: this.$store.state.id
+        uid: window.localStorage.getItem("id")
       }
       let url = this.HOST + '/user/playlist';
       this.axios.get(url,{params}).then(res => {

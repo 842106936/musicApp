@@ -39,12 +39,14 @@
       </el-row>
     </div>
 
-    <mt-cell title="播放全部">
-      <i name="icon" class="fa-play-circle"></i>
-    </mt-cell>
+    <div @click="addListToPlayerList">
+      <mt-cell title="播放全部">
+        <i name="icon" class="fa-play-circle"></i>
+      </mt-cell>
+    </div>
     <div class="music-list">
       <ul>
-        <li v-for="(item,index) in playlist" :key="item.id" @click="MusicPlay(item.id)">
+        <li v-for="(item,index) in playlist" :key="item.id" @click="MusicPlay(item)">
           <div class="info">
             <div class="playlist-index">
               <h3>{{index+1}}</h3>
@@ -54,7 +56,7 @@
               <p class="author">{{item.ar[0].name}}&nbsp;-&nbsp;{{item.al.name}}</p>
             </div>
           </div>
-          <i class="fa-ellipsis-v" @click="sheetVisible = true"></i>
+          <i class="fa-ellipsis-v" @click.stop="sheetVisible = true"></i>
         </li>
       </ul>
     </div>
@@ -79,16 +81,28 @@ export default {
       ],
       banner:[],
       playlist:[],
-      id:this.$route.params.id
+      id:this.$route.params.id,
+      List:[]
     }
   },
   created() {
       this.getPlaylist();
   },
+  computed: {
+    ...mapState([
+      'musicInfo',"playerList"
+    ])
+  },
   methods: {
-    ...mapActions([
-      'MusicPlay'
-    ]),
+    MusicPlay(item) {
+      let arr = {
+        title : item.name,
+        author : item.ar[0].name,
+        id : item.id,
+        pic : item.al.picUrl
+      }
+      this.$store.dispatch('musicInfo', arr);
+    },
     getPlaylist() {
       let params = {
         id: this.id
@@ -97,7 +111,23 @@ export default {
       this.axios.get(url,{params}).then(res => {
         this.banner = res.data.playlist;
         this.playlist = res.data.playlist.tracks;
+
+        for(var i = 0; i < this.playlist.length; i++){
+          let obj = {
+            title : this.playlist[i].name,
+            author : this.playlist[i].ar[0].name,
+            id : this.playlist[i].id,
+            pic : this.playlist[i].al.picUrl
+          }
+          this.List.push(obj);
+        }
       });
+    },
+    addListToPlayerList(){
+      if(this.playerList.id.indexOf(this.id) == -1){
+        this.$store.commit('addListID', this.id);
+        this.$store.commit('addListToPlayerList', this.List);
+      }
     }
   }
 }

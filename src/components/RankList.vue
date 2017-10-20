@@ -39,12 +39,14 @@
       </el-row>
     </div>
 
-    <mt-cell title="播放全部">
-      <i name="icon" class="fa-play-circle"></i>
-    </mt-cell>
+    <div @click="addListToPlayerList">
+      <mt-cell title="播放全部">
+        <i name="icon" class="fa-play-circle"></i>
+      </mt-cell>
+    </div>
     <div class="music-list">
       <ul>
-        <li v-for="(item,index) in ranks" :key="item.id" @click="MusicPlay(item.id)">
+        <li v-for="(item,index) in ranks" :key="item.id" @click="MusicPlay(item)">
           <div class="info">
             <div class="rank-index">
               <h3>{{index+1}}</h3>
@@ -81,7 +83,8 @@ export default {
       ],
       banner:[],
       ranks:[],
-      idx:this.$route.params.idx
+      idx:this.$route.params.idx,
+      List:[]
     }
   },
   created() {
@@ -93,10 +96,21 @@ export default {
       return rk ?  rk : 0;
     }
   },
+  computed:{
+    ...mapState([
+      'musicInfo',"playerList"
+    ])
+  },
   methods: {
-    ...mapActions([
-      'MusicPlay'
-    ]),
+    MusicPlay(item) {
+      let arr = {
+        title : item.name,
+        author : item.artists[0].name,
+        id : item.id,
+        pic : item.album.picUrl
+      }
+      this.$store.dispatch('musicInfo', arr);
+    },
     getRanks() {
       let params = {
         idx: this.idx
@@ -105,7 +119,23 @@ export default {
       this.axios.get(url,{params}).then(res => {
         this.banner = res.data.result;
         this.ranks = res.data.result.tracks;
+
+        for(var i = 0; i < this.ranks.length; i++){
+          let obj = {
+            title : this.ranks[i].name,
+            author : this.ranks[i].artists[0].name,
+            id : this.ranks[i].id,
+            pic : this.ranks[i].album.picUrl
+          }
+          this.List.push(obj);
+        }
       });
+    },
+    addListToPlayerList(){
+      if(this.playerList.id.indexOf(this.id) == -1){
+        this.$store.commit('addListID', this.id);
+        this.$store.commit('addListToPlayerList', this.List);
+      }
     }
   }
 }

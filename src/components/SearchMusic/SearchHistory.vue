@@ -41,15 +41,17 @@ export default{
     }
   },
   created() {
-    this.his = window.sessionStorage.getItem("historys");
-    let tempArr=this.his.split(',');
-    let returnArr=new Array();
-    let i,len=tempArr.length;
-    for(i=0;i<len;i++){
-        returnArr.push(tempArr[i]);
-    }
-    this.his = returnArr;
-    this.$store.dispatch("historys",returnArr);
+      this.his = window.sessionStorage.getItem("historys");
+      if(this.his != null){
+        let tempArr=this.his.split(',');
+        let returnArr=new Array();
+        let i,len=tempArr.length;
+        for(i=0;i<len;i++){
+            returnArr.push(tempArr[i]);
+        }
+        this.his = returnArr;
+        this.$store.dispatch("historys",returnArr);
+      }
   },
   computed: {
     ...mapState([
