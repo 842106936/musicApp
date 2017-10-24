@@ -1,6 +1,6 @@
 <template>
-  <div v-if="flag" class="MusicPlayer">
-    <router-link class="img" to="/">
+  <div v-show="flag && playerShow" class="MusicPlayer">
+    <router-link class="img" to="/player">
       <img :src="songs.pic">
     </router-link>
     <div class="info">
@@ -8,13 +8,13 @@
       <p class="author">{{songs.author}}</p>
     </div>
     <div class="btn">
-      <a @click="btnPlay"><i :class="play ? 'fa-pause-circle' : 'fa-play-circle'"></i></a>
+      <a @click="btnPlay"><i :class="playStatus ? 'fa-pause-circle' : 'fa-play-circle'"></i></a>
       <a @click="showPlayerList = true"><i class="fa-indent"></i></a>
     </div>
 
     <player-list :showPlayerList="showPlayerList" @close="close"></player-list>
 
-    <audio id="audio" :src="songs.url" controls="controls" ref="player" @ended="autoPlayNext()"></audio>
+    <audio id="audio" :src="songs.url" controls="controls" ref="player" @ended="autoPlayNext" @loadedmetadata="songDuration" @timeupdate="songCurrentTime" @waiting="bufferingTrue" @canplay="bufferingFalse"></audio>
   </div>
 </template>
 
@@ -27,13 +27,12 @@ export default{
     return {
       showPlayerList:false,
       songs:[],
-      play:true,
       listID:[]
     }
   },
   computed: {
     ...mapState([
-      "musicInfo","playerList","songIndex"
+      "playStatus","musicInfo","playerList","songIndex","playerShow"
     ]),
     audio() {
       return document.querySelector('#audio')
@@ -60,7 +59,7 @@ export default{
       this.$nextTick(() => {
         if(!this.audio.paused){
           document.querySelector('#audio').pause();
-          this.play = false;
+          this.$store.commit("playStatus",false);
         }
       });
       return new Promise((resolve, reject) => {
@@ -81,7 +80,7 @@ export default{
       })
       .then(() => {
         document.querySelector('#audio').play();
-        this.play = true;
+        this.$store.commit("playStatus",true);
       })
       .then(() => {
         const arr = new Array;
@@ -102,17 +101,29 @@ export default{
       this.showPlayerList=false;
     },
     btnPlay() {
-      if(this.play){
-        this.play = false;
-        this.audio.pause();
+      if(this.playStatus){
+        document.querySelector('#audio').pause();
+        this.$store.commit("playStatus",false);
       }else{
-        this.play = true;
-        this.audio.play();
+        document.querySelector('#audio').play();
+        this.$store.commit("playStatus",true);
       }
     },
     autoPlayNext() {
       this.$store.dispatch("autoNextMusic");
       console.log("播放结束")
+    },
+    songDuration() {
+      this.$store.commit("songDuration",this.audio.duration);
+    },
+    songCurrentTime() {
+      this.$store.commit("songCurrentTime",this.audio.currentTime);
+    },
+    bufferingTrue() {
+      this.$store.commit("isBuffering",true);
+    },
+    bufferingFalse() {
+      this.$store.commit("isBuffering",false);
     }
   }
 }
@@ -128,7 +139,7 @@ export default{
   position: fixed;
   bottom:0px;
   left:0px;
-  z-index:99999999999999;
+  z-index:1000;
   .img{
     width:40px;
     height:40px;

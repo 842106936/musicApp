@@ -53,8 +53,28 @@ export default {
   searchList(state, data) {
     state.searchList = data;
   },
+  playerShow(state, data) {
+    state.playerShow = data;
+  },
+  //当前正在播放音频的总时长
+  songDuration(state, data) {
+    state.songDuration = data;
+  },
+  //当前正在播放音频的播放时间
+  songCurrentTime(state, data) {
+    state.songCurrentTime = data;
+  },
+  //音频是否在缓冲状态
+  isBuffering(state, data) {
+    state.isBuffering = data;
+  },
+  //当前播放歌曲信息
   musicInfo(state, data) {
     state.musicInfo = data
+  },
+  //音频是否播放
+  playStatus(state, data) {
+    state.playStatus = data;
   },
   //将单曲加入播放列表
   addItemToPlayList(state, songs) {
@@ -62,13 +82,14 @@ export default {
   },
   //将单曲加入播放列表（如果播放列表中含有该歌曲，将该歌曲的索引变为0）
   sortItemToPlayList(state, i) {
-    return new Promise((resolve, reject) => {
-      state.playerList.List.unshift(state.playerList.List[i]);
-      resolve();
-    })
-    .then(() => {
-      state.playerList.List.splice(i+1, 1);
-    })
+    // return new Promise((resolve, reject) => {
+    //   state.playerList.List.unshift(state.playerList.List[i]);
+    //   resolve();
+    // })
+    // .then(() => {
+    //   state.playerList.List.splice(i+1, 1);
+    // })
+    state.songIndex = i;
   },
   //将单曲从播放列表移除
   removeItemFromPlayList(state, index) {

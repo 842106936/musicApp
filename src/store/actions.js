@@ -30,16 +30,42 @@ export default {
       commit('searchList', data);
   },
   musicInfo({state,commit}, data) {
-    commit('musicInfo', data)
+    commit('musicInfo', data);
   },
+  //自动播放下一首
   autoNextMusic({state, commit, dispatch}) {
-    if(state.songIndex < state.playerList.List.length-1){
-      state.songIndex += 1
-    }else{
-      state.songIndex = 0;
+    if(state.playerMode == 'Recycle'){
+      if(state.songIndex == state.playerList.List.length - 1){
+        dispatch('musicInfo', state.playerList.List[0]);
+        state.songIndex = 0;
+      }else{
+        dispatch('musicInfo', state.playerList.List[state.songIndex + 1]);
+        state.songIndex += 1
+      }
+      console.log("循环播放")
+    }else if(state.playerMode == 'Single'){
+      dispatch('musicInfo', []);
+      var timer = setTimeout(function() {
+          dispatch('musicInfo', state.playerList.List[state.songIndex]);
+          clearTimeout(timer);
+      }, 1000)
+      console.log("单曲循环")
+    }else if(state.playerMode == 'Random'){
+      var startRange = 0;
+      var endRange = state.playerList.List.length;
+      var randomNumber = Math.floor(Math.random() * (endRange - startRange) + startRange);
+      console.log(randomNumber);
+      if(randomNumber == state.songIndex) {
+          dispatch('musicInfo', state.playerList.List[0]);
+          state.songIndex = 0;
+      }else{
+        dispatch('musicInfo', state.playerList.List[randomNumber]);
+        state.songIndex = randomNumber;
+      }
+      console.log("随机循环")
     }
-    commit('musicInfo', state.playerList.List[state.songIndex]);
   },
+  //将歌曲收藏到歌单
   tracksPlayerList({state,commit}, id) {
     const params = {
       op:add,

@@ -25,3 +25,20 @@ img[lazy=loaded] {
     opacity: 1
   }
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
+.up-enter-active, .up-leave-active {
+    transition: all .3s;
+}
+.up-enter, .up-leave-active {
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+}

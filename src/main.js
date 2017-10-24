@@ -40,6 +40,7 @@ import rank from './components/main/MusicPart/rank.vue'
 
 import historyList from './components/main/MinePart/HistoryList.vue'
 
+import player from './components/musicPlayer/Player.vue'
 /*开启debug模式*/
 Vue.config.debug = true
 /*关闭开发模式或生产模式提醒*/
@@ -135,6 +136,11 @@ const router = new Router({
     name:'historyList',
     path: '/HistoryList',
     component: historyList
+  },
+  {
+    name:'player',
+    path: '/player',
+    component: player
   }]
 })
 

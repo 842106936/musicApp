@@ -93,22 +93,7 @@ export default{
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
-}
-.fade-enter, .fade-leave-active {
-  opacity: 0;
-}
-.up-enter-active, .up-leave-active {
-    transition: all .3s;
-}
-.up-enter, .up-leave-active {
-  -webkit-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  -o-transform: translateY(100%);
-  transform: translateY(100%);
-}
+@import '../../assets/css/public.less';
 
 .music-player-list{
   width:100%;
