@@ -158,9 +158,17 @@ router.beforeEach((to, from, next) => {
     } else {
       direction = 'right'         // 如果进入的下标大于离开的下标，那么是右滑
     }
+    store.commit("playerShow",true);
+  }else if (toName == '/player') {
+    direction = 'up'
+    store.commit("playerShow",false);
+  }else{
+    store.commit("playerShow",true);
   }
- store.state.viewDirection = direction
+
+ store.state.viewDirection = direction;
  //store.dispatch('viewDirection',direction); //这里使用vuex进行赋值
+
  next();
 })
 

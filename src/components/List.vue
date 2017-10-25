@@ -24,6 +24,7 @@
     <div class="music-list">
       <ul>
         <li v-for="item in musics" :key="item.id" @click="MusicPlay(item)">
+          <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
             <p class="name"><b>{{item.name}}</b><em>{{item.alias[0]}}</em></p>
             <p class="author">{{item.artists[0].name}}&nbsp;-&nbsp;{{item.album.name}}</p>
@@ -107,7 +108,7 @@ export default {
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../assets/css/public.less';
   @import '../assets/css/animate.less';
-
+  
   .mint-header{
     background:@bg-color;
   }
@@ -143,6 +144,11 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      .icon{
+        font-size:16px;
+        color:@color-red;
+        font-weight: bold;
+      }
       .info{
         .name{
           b{

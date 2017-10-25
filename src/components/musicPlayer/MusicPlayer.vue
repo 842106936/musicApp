@@ -1,7 +1,7 @@
 <template>
   <div v-show="flag && playerShow" class="MusicPlayer">
     <router-link class="img" to="/player">
-      <img :src="songs.pic">
+      <img v-lazy="songs.pic">
     </router-link>
     <div class="info">
       <p class="title">{{songs.title}}</p>
@@ -47,7 +47,16 @@ export default{
   },
   watch: {
     musicInfo() {
-      this.init();
+      if(this.musicInfo != ''){
+        this.init();
+      }
+    },
+    playStatus() {
+      if(this.playStatus){
+        document.querySelector('#audio').play();
+      }else{
+        document.querySelector('#audio').pause();
+      }
     }
   },
   components:{

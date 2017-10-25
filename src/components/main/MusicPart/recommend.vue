@@ -147,7 +147,7 @@
 
 <script>
 import { Indicator } from 'mint-ui';
-import BScroll from 'better-scroll';
+// import BScroll from 'better-scroll';
 import {mapState ,mapMutations ,mapActions} from 'vuex';
 
 export default{
@@ -164,10 +164,10 @@ export default{
   },
   created() {
       if(this.banners.length == 0){
-        Indicator.open({
-          text: '加载中...',
-          spinnerType: 'fading-circle'
-        });
+        // Indicator.open({
+        //   text: '加载中...',
+        //   spinnerType: 'fading-circle'
+        // });
         this.getBanners();
         this.getSheets();
         this.getSoles();
@@ -206,9 +206,9 @@ export default{
       let url = this.HOST + '/personalized';
       this.axios.get(url).then(res => {
         this.$store.commit('sheets',res.data.result);
-        this.$nextTick(() => {
-          this._initScroll();
-        })
+        // this.$nextTick(() => {
+        //   this._initScroll();
+        // })
       });
     },
     getSoles() {
@@ -251,17 +251,17 @@ export default{
     },
     handleTopChange(status) {
       this.topStatus = status;
-    },
-    _initScroll() {
-      Indicator.close();
-      if (!this.helloScroll) {
-        this.helloScroll = new BScroll(this.$refs.partIndex, {
-          click: true
-        });
-      } else {
-        this.helloScroll.refresh();
-      }
     }
+    // _initScroll() {
+    //   Indicator.close();
+    //   if (!this.helloScroll) {
+    //     this.helloScroll = new BScroll(this.$refs.partIndex, {
+    //       click: true
+    //     });
+    //   } else {
+    //     this.helloScroll.refresh();
+    //   }
+    // }
   }
 }
 </script>

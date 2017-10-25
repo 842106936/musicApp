@@ -3,7 +3,7 @@
     <img class="backgroundImg" :src="musicInfo.pic"/>
     <div class="player-main">
       <div class="player-head">
-        <a><i class="fa-angle-left" @click="goBack"></i></a>
+        <a><i class="fa-angle-left" @click="$router.back(-1)"></i></a>
         <p>
           <b>{{musicInfo.title}}</b>
           <em>{{musicInfo.author}}</em>
@@ -14,8 +14,8 @@
       <transition name="fade">
         <div v-if="!playerLyricShow" class="player-animation" :style="screenHeight">
           <div class="player-picshow">
-            <div class="player-animation-gan"></div>
-            <div class="player-animation-pan">
+            <div class="player-animation-gan" :class="{'pausing':!playStatus}"></div>
+            <div class="player-animation-pan" :class="{'pausing':!playStatus}">
               <img :src="musicInfo.pic"/>
             </div>
           </div>
@@ -41,64 +41,86 @@
 
       <div class="player-control">
         <div class="player-process">
-          <b>{{songCurrentTime}}</b>
+          <b>{{songCurrentTime | transformTime}}</b>
           <div class="player-progress">
             <div class="player-progress-download"></div>
-            <div class="player-progress-play"></div>
-            <div v-if="isBuffering" class="player-progress-loading"></div>
-            <div v-if="!isBuffering" class="play-progress-btn"></div>
+            <div class="player-progress-play" :style="{'width': playWidth + '%'}">
+              <div v-if="isBuffering" class="player-progress-loading"></div>
+              <div v-if="!isBuffering" class="play-progress-btn"></div>
+            </div>
           </div>
-          <b>{{songDuration}}</b>
+          <b>{{songDuration | transformTime}}</b>
         </div>
-        <div class="player-control">
-          <i :class="{'fa-random' : playerMode == 'Random','fa-recycle' : playerMode == 'Recycle','fa-refresh' : playerMode == 'Single'}"></i>
+        <div class="play-control">
+          <div class="play-control-btn">
+            <i @click="changePlayerMode" :class="{'fa-random' : playerMode == 'Random','fa-recycle' : playerMode == 'Recycle','fa-refresh' : playerMode == 'Single'}"></i>
+          </div>
           <div class="play-control-main">
-            <a @click="btnPrev"><i class="fa-step-backward"></i></a>
-            <a @click="btnPlay"><i :class="playStatus ? 'fa-pause-circle' : 'fa-play-circle'"></i></a>
-            <a @click="btnNext"><i class="fa-step-forward"></i></a>
+            <i class="play-prev fa-step-backward" @click="btnPrev"></i>
+            <i class="play-btn" :class="playStatus ? 'fa-pause-circle' : 'fa-play-circle'" @click="btnPlay"></i>
+            <i class="play-next fa-step-forward" @click="btnNext"></i>
+          </div>
+          <div class="play-control-btn">
+            <i class="fa-indent" @click="showPlayerList = true"></i>
           </div>
         </div>
       </div>
-
     </div>
+    <player-list :showPlayerList="showPlayerList" @close="close"></player-list>
   </div>
 </template>
 
 <script>
 import {mapState ,mapMutations ,mapActions} from 'vuex';
+import playerList from './MusicPlayerList.vue'
+
 export default{
   data() {
     return {
+      showPlayerList:false,
       playerLyricShow:false,
       screenHeight:{
-        height: window.screen.height - 60 + 'px'
+        height: window.screen.height - 180 + 'px'
       }
     }
-  },
-  created() {
-    this.$store.commit("playerShow",false);
   },
   computed: {
     ...mapState([
       "musicInfo","isBuffering","playerMode","playStatus","songCurrentTime","songDuration"
-    ])
+    ]),
+    playWidth() {
+      return (this.songCurrentTime/this.songDuration)*100;
+    }
+  },
+  filters: {
+    transformTime(time) {
+      if (!time) return '00:00' //  避免传入undefined引发的错误
+      var min = parseInt(time / 60)
+      var sec = parseInt(time % 60)
+      return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)
+    }
+  },
+  components:{
+    'player-list':playerList
   },
   methods: {
+    ...mapMutations([
+      "changePlayerMode"
+    ]),
     btnPrev() {
-
+      this.$store.dispatch("prevMusic");
     },
     btnPlay() {
-
+      this.playStatus ? this.$store.commit("playStatus", false) : this.$store.commit("playStatus", true);
     },
     btnNext() {
-
+      this.$store.dispatch("autoNextMusic");
     },
     likeSong() {
 
     },
-    goBack() {
-      this.$router.back(-1);
-      this.$store.commit("playerShow",true);
+    close() {
+      this.showPlayerList=false;
     }
   }
 }
@@ -111,18 +133,15 @@ export default{
   width:100%;
   height:100%;
   position: relative;
-  z-index:10000;
   .backgroundImg{
     width:100%;
     height:100%;
-    -o-filter:blur(100px);-moz-filter:blur(100px);-webkit-filter:blur(100px);-ms-filter:blur(100px);filter:blur(100px);
+    -o-filter:blur(100px) brightness(.8);-moz-filter:blur(100px) brightness(.8);-webkit-filter:blur(100px) brightness(.8);-ms-filter:blur(100px) brightness(.8);filter:blur(100px) brightness(.8);
     position: absolute;
-    z-index:10000;
   }
   .player-main{
     width:100%;
     height:100%;
-    z-index:10001;
     position: relative;
     .player-head{
       width:100%;
@@ -173,7 +192,7 @@ export default{
       position: relative;
       .player-picshow{
         width:100%;
-        height:calc(~"100% - 170px");
+        height:calc(~"100% - 40px");
         position: relative;
         overflow: hidden;
         .player-animation-gan{
@@ -191,16 +210,10 @@ export default{
           -ms-transition: transform .5s ;
           -o-transition: transform .5s ;
           transition: transform .5s ;
-          transform-origin: 0.8125rem 0.8125rem;
-        }
-        .player-animation-gan.pausing {
-          transform: rotate(-25deg);
-        }
-        .player-animation-gan.pausing {
-          -webkit-animation-play-state: paused;
-          -moz-animation-play-state: paused;
-          -o-animation-play-state: paused;
-          animation-play-state: paused;
+          transform-origin: 0 0;
+          &.pausing {
+            transform: rotate(-25deg);
+          }
         }
         .player-animation-pan{
           width:280px;
@@ -220,6 +233,12 @@ export default{
           -moz-animation-play-state: running;
           -o-animation-play-state: running;
           animation-play-state: running;
+          &.pausing{
+            -webkit-animation-play-state: paused;
+            -moz-animation-play-state: paused;
+            -o-animation-play-state: paused;
+            animation-play-state: paused;
+          }
           img{
             width:200px;
             height:200px;
@@ -240,6 +259,99 @@ export default{
           i{
             color:#FFF;
             font-size:@font-size*1.5;
+          }
+        }
+      }
+    }
+    .player-control{
+      width:100%;
+      height:120px;
+      .player-process{
+        width:100%;
+        height:50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        b{
+          width:55px;
+          height:100%;
+          font-size:@font-size*0.8;
+          font-style:normal;
+          line-height:50px;
+          text-align: center;
+          color:#FFF;
+        }
+        .player-progress{
+          width:calc(~"100% - 110px");
+          height:6px;
+          background:#eee;
+          border-radius:3px;
+          position:relative;
+          .player-progress-download{
+            width:100%;
+            height:6px;
+            background-color:#fff;
+            border-radius:3px;
+            position: absolute;
+          }
+          .player-progress-play{
+            width:0%;
+            height:6px;
+            background-color:@color-red;
+            border-radius:3px;
+            position: absolute;
+            .player-progress-loading{
+              position: absolute;
+              right:0px;
+              top:-5px;
+              width:16px;
+              height:16px;
+              border-radius:50%;
+              background-color:#FFF;
+            }
+            .play-progress-btn{
+              position: absolute;
+              right:0px;
+              top:-5px;
+              width:16px;
+              height:16px;
+              border-radius:50%;
+              background-color:#fff;
+            }
+          }
+        }
+      }
+      .play-control{
+        width:100%;
+        height:70px;
+        display: flex;
+        .play-control-btn{
+          width:60px;
+          height:100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          i{
+            font-size:@font-size*1.5;
+            color:#fff;
+          }
+        }
+        .play-control-main{
+          width:calc(~"100% - 120px");
+          height:100%;
+          display: flex;
+          justify-content:space-around;
+          align-items: center;
+          .play-prev{
+            font-size:@font-size*2;
+            color:#FFF;
+          }
+          .play-next{
+            .play-prev
+          }
+          .play-btn{
+            font-size:@font-size*2.5;
+            color:#FFF;
           }
         }
       }

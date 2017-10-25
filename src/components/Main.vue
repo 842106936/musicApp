@@ -45,9 +45,9 @@ export default {
        const viewDir = this.$store.state.viewDirection
        let tranName = ''
        if (viewDir === 'left') {
-         tranName = 'slide-right'
-       } else if (viewDir === 'right') {
          tranName = 'slide-left'
+       } else if (viewDir === 'right') {
+         tranName = 'slide-right'
        } else {
          tranName = 'fade'
        }

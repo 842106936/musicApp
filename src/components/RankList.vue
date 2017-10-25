@@ -47,6 +47,7 @@
     <div class="music-list">
       <ul>
         <li v-for="(item,index) in ranks" :key="item.id" @click="MusicPlay(item)">
+          <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
             <div class="rank-index">
               <h3>{{index+1}}</h3>
@@ -233,8 +234,13 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      .icon{
+        font-size:16px;
+        color:@color-red;
+        font-weight: bold;
+      }
       .info{
-        width:90%;
+        width:calc(~"100% - 40px");
         height:100%;
         display: flex;
         align-items: center;

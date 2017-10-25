@@ -27,7 +27,7 @@
         <div class="player-list-content">
           <ul>
             <li v-for="(item,index) in playerList.List" :key="item.id" @click="MusicPlay(item)">
-              <p><em>{{item.title}}</em><em>{{item.author}}</em></p>
+              <p><i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i><b>{{item.title}}</b><em>{{item.author}}</em></p>
               <i class="fa-times" @click.stop="remove(index)"></i>
             </li>
           </ul>
@@ -48,7 +48,7 @@ export default{
   },
   computed: {
     ...mapState([
-      'playerMode','playerList'
+      'musicInfo','playerMode','playerList'
     ]),
     playerModeTips() {
       switch (this.playerMode) {
@@ -178,13 +178,21 @@ export default{
             white-space: nowrap;
             text-overflow:ellipsis;
             overflow: hidden;
-            em:nth-child(1){
+            display: flex;
+            align-items: center;
+            .icon{
+              font-size:16px;
+              color:@color-red;
+              font-weight: bold;
+              margin-right:5px;
+            }
+            b{
               font-size:14px;
               color:#333;
               line-height:30px;
               font-style: normal;
             }
-            em:nth-child(2){
+            em{
               font-size:12px;
               color:#666;
               line-height:30px;

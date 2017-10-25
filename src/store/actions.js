@@ -44,7 +44,39 @@ export default {
       }
       console.log("循环播放")
     }else if(state.playerMode == 'Single'){
-      dispatch('musicInfo', []);
+      dispatch('musicInfo', '');
+      var timer = setTimeout(function() {
+          dispatch('musicInfo', state.playerList.List[state.songIndex]);
+          clearTimeout(timer);
+      }, 1000)
+      console.log("单曲循环")
+    }else if(state.playerMode == 'Random'){
+      var startRange = 0;
+      var endRange = state.playerList.List.length;
+      var randomNumber = Math.floor(Math.random() * (endRange - startRange) + startRange);
+      console.log(randomNumber);
+      if(randomNumber == state.songIndex) {
+          dispatch('musicInfo', state.playerList.List[0]);
+          state.songIndex = 0;
+      }else{
+        dispatch('musicInfo', state.playerList.List[randomNumber]);
+        state.songIndex = randomNumber;
+      }
+      console.log("随机循环")
+    }
+  },
+  prevMusic({state, commit, dispatch}){
+    if(state.playerMode == 'Recycle'){
+      if(state.songIndex == 0){
+        dispatch('musicInfo', state.playerList.List[state.playerList.List.length - 1]);
+        state.songIndex = 0;
+      }else{
+        dispatch('musicInfo', state.playerList.List[state.songIndex - 1]);
+        state.songIndex -= 1
+      }
+      console.log("循环播放")
+    }else if(state.playerMode == 'Single'){
+      dispatch('musicInfo', '');
       var timer = setTimeout(function() {
           dispatch('musicInfo', state.playerList.List[state.songIndex]);
           clearTimeout(timer);
