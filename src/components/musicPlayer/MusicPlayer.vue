@@ -1,7 +1,7 @@
 <template>
   <div v-show="flag && playerShow" class="MusicPlayer">
     <router-link class="img" to="/player">
-      <img v-lazy="songs.pic">
+      <img :src="songs.pic">
     </router-link>
     <div class="info">
       <p class="title">{{songs.title}}</p>

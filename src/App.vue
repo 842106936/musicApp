@@ -21,7 +21,7 @@ export default{
        "viewDirection"
      ]),
      paddingBottom() {
-       if(this.viewDirection != "up"){
+       if(this.viewDirection != "slide-top"){
          return "50px"
        }else{
          return "0"
@@ -36,7 +36,7 @@ export default{
 
 <style lang="less" rel="stylesheet/less" scoped>
 @import './assets/css/public.less';
-
+@import './assets/css/animate.less';
 #app{
 
 }

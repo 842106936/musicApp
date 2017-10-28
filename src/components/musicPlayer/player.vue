@@ -1,5 +1,5 @@
 <template>
-  <div class="player">
+  <div class="player" :style="{'height': screenHeigth}">
     <img class="backgroundImg" :src="musicInfo.pic"/>
     <div class="player-main">
       <div class="player-head">
@@ -75,12 +75,13 @@ import {mapState ,mapMutations ,mapActions} from 'vuex';
 import playerList from './MusicPlayerList.vue'
 
 export default{
+  name:'player',
   data() {
     return {
       showPlayerList:false,
       playerLyricShow:false,
       screenHeight:{
-        height: window.screen.height - 180 + 'px'
+        height: window.screen.availHeight - 180 + 'px'
       }
     }
   },
@@ -90,6 +91,9 @@ export default{
     ]),
     playWidth() {
       return (this.songCurrentTime/this.songDuration)*100;
+    },
+    screenHeigth() {
+      return window.screen.availHeight + 'px';
     }
   },
   filters: {
@@ -131,8 +135,16 @@ export default{
 
 .player{
   width:100%;
-  height:100%;
   position: relative;
+  overflow:hidden;
+  position: absolute;
+  top: 0;
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   .backgroundImg{
     width:100%;
     height:100%;
@@ -195,6 +207,8 @@ export default{
         height:calc(~"100% - 40px");
         position: relative;
         overflow: hidden;
+        transform-style:preserve-3d;
+        perspective:800px;
         .player-animation-gan{
           width:63px*1.4;
           height:97px*1.4;
@@ -227,6 +241,7 @@ export default{
           top:calc(~"50% - 140px");
           left:calc(~"50% - 140px");
           -webkit-animation: disketteRotate 20s linear infinite;
+          -moz-animation: disketteRotate 20s linear infinite;
           -o-animation: disketteRotate 20s linear infinite;
           animation: disketteRotate 20s linear infinite;
           -webkit-animation-play-state: running;
@@ -244,7 +259,6 @@ export default{
             height:200px;
             border-radius:50%;
             overflow:hidden;
-            position: absolute;
           }
         }
       }
@@ -375,6 +389,22 @@ export default{
       transform: rotate3d(0, 0, 1, 360deg);
     }
   }
+  @-moz-keyframes disketteRotate {
+      from {
+        -webkit-transform: rotate3d(0, 0, 1, 0deg);
+        -moz-transform: rotate3d(0, 0, 1, 0deg);
+        -ms-transform: rotate3d(0, 0, 1, 0deg);
+        -o-transform: rotate3d(0, 0, 1, 0deg);
+        transform: rotate3d(0, 0, 1, 0deg);
+      }
+      to {
+        -webkit-transform: rotate3d(0, 0, 1, 360deg);
+        -moz-transform: rotate3d(0, 0, 1, 360deg);
+        -ms-transform: rotate3d(0, 0, 1, 360deg);
+        -o-transform: rotate3d(0, 0, 1, 360deg);
+        transform: rotate3d(0, 0, 1, 360deg);
+      }
+    }
   @keyframes disketteRotate {
     from {
       -webkit-transform: rotate3d(0, 0, 1, 0deg);

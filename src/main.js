@@ -159,8 +159,8 @@ router.beforeEach((to, from, next) => {
       direction = 'right'         // 如果进入的下标大于离开的下标，那么是右滑
     }
     store.commit("playerShow",true);
-  }else if (toName == '/player') {
-    direction = 'up'
+  }else if (toName == '/player' || from == '/player') {
+    direction = 'slide-bottom'
     store.commit("playerShow",false);
   }else{
     store.commit("playerShow",true);
