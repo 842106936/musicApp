@@ -108,7 +108,7 @@ export default {
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../assets/css/public.less';
   @import '../assets/css/animate.less';
-  
+
   .mint-header{
     background:@bg-color;
   }

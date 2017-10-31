@@ -18,13 +18,13 @@ export default{
   },
   computed: {
      ...mapState([
-       "viewDirection"
+       "viewDirection","musicInfo"
      ]),
      paddingBottom() {
-       if(this.viewDirection != "slide-top"){
-         return "50px"
+       if(this.musicInfo == ''){
+         return "0";
        }else{
-         return "0"
+         return "50px";
        }
      }
   },

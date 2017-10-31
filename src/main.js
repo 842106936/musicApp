@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import Router from 'vue-router'
 import store from './store'
-import axios from 'axios'
-import qs from 'qs'
-import VueAxios from 'vue-axios'
+import API from './api'
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import Mint from 'mint-ui'
@@ -58,7 +57,6 @@ Vue.use(VueLazyLoad, {
 });
 
 Vue.use(Router)
-Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 Vue.use(Mint)
 
@@ -176,7 +174,11 @@ router.afterEach(() => {
   NProgress.done();
 })
 
-Vue.prototype.HOST = '/api'
+//生产环境全域名
+Vue.prototype.HOST = 'http://musicapi.leanapp.cn'
+//开发环境服务器代理（若跨域）
+// Vue.prototype.HOST = '/api'
+// Vue.prototype.HOST = '/nodeApi'
 
 // Vue.prototype.MusicPlay = function(id) {
 //   let getMusicDetail = (id) =>  {

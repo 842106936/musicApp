@@ -196,7 +196,6 @@ export default{
     getBanners() {
       let url = this.HOST + '/banner';
       this.axios.get(url).then(res => {
-        console.log(res.data)
         this.$store.commit('banners',res.data.banners);
       });
     },

@@ -93,7 +93,7 @@ export default{
       return (this.songCurrentTime/this.songDuration)*100;
     },
     screenHeigth() {
-      return window.screen.availHeight + 'px';
+      return window.screen.availHeight  + 'px';
     }
   },
   filters: {
@@ -130,8 +130,93 @@ export default{
 }
 </script>
 
+<style>
+.player-animation-pan{
+  -webkit-animation: rotate 20s linear infinite;
+  -moz-animation: rotate 20s linear infinite;
+  -o-animation: rotate 20s linear infinite;
+  animation: rotate 20s linear infinite;
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    -moz-transform: rotate3d(0, 0, 1, 0deg);
+    -ms-transform: rotate3d(0, 0, 1, 0deg);
+    -o-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  to {
+    -webkit-transform: rotate3d(0, 0, 1, 360deg);
+    -moz-transform: rotate3d(0, 0, 1, 360deg);
+    -ms-transform: rotate3d(0, 0, 1, 360deg);
+    -o-transform: rotate3d(0, 0, 1, 360deg);
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    -moz-transform: rotate3d(0, 0, 1, 0deg);
+    -ms-transform: rotate3d(0, 0, 1, 0deg);
+    -o-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  to {
+    -webkit-transform: rotate3d(0, 0, 1, 360deg);
+    -moz-transform: rotate3d(0, 0, 1, 360deg);
+    -ms-transform: rotate3d(0, 0, 1, 360deg);
+    -o-transform: rotate3d(0, 0, 1, 360deg);
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
+</style>
+
 <style lang="less" rel="stylesheet/less" scoped>
 @import '../../assets/css/public.less';
+
+.rotate(@name){
+  @-webkit-keyframes @name {
+    from {
+      -webkit-transform: rotate3d(0, 0, 1, 0deg);
+      -moz-transform: rotate3d(0, 0, 1, 0deg);
+      -ms-transform: rotate3d(0, 0, 1, 0deg);
+      -o-transform: rotate3d(0, 0, 1, 0deg);
+      transform: rotate3d(0, 0, 1, 0deg);
+    }
+    to {
+      -webkit-transform: rotate3d(0, 0, 1, 360deg);
+      -moz-transform: rotate3d(0, 0, 1, 360deg);
+      -ms-transform: rotate3d(0, 0, 1, 360deg);
+      -o-transform: rotate3d(0, 0, 1, 360deg);
+      transform: rotate3d(0, 0, 1, 360deg);
+    }
+  }
+  @keyframes @name {
+    from {
+      -webkit-transform: rotate3d(0, 0, 1, 0deg);
+      -moz-transform: rotate3d(0, 0, 1, 0deg);
+      -ms-transform: rotate3d(0, 0, 1, 0deg);
+      -o-transform: rotate3d(0, 0, 1, 0deg);
+      transform: rotate3d(0, 0, 1, 0deg);
+    }
+    to {
+      -webkit-transform: rotate3d(0, 0, 1, 360deg);
+      -moz-transform: rotate3d(0, 0, 1, 360deg);
+      -ms-transform: rotate3d(0, 0, 1, 360deg);
+      -o-transform: rotate3d(0, 0, 1, 360deg);
+      transform: rotate3d(0, 0, 1, 360deg);
+    }
+  }
+}
+.rotate(rotate);
+.animation(@animation-name,@animation-duration,@animation-timing-function,@animation-iteration-count){
+  -webkit-animation: @arguments;
+  -moz-animation: @arguments;
+  -ms-animation: @arguments;
+  -o-animation:  @arguments;
+  animation: @arguments;
+}
+
 
 .player{
   width:100%;
@@ -150,6 +235,8 @@ export default{
     height:100%;
     -o-filter:blur(100px) brightness(.8);-moz-filter:blur(100px) brightness(.8);-webkit-filter:blur(100px) brightness(.8);-ms-filter:blur(100px) brightness(.8);filter:blur(100px) brightness(.8);
     position: absolute;
+    left:0px;
+    top:0px;
   }
   .player-main{
     width:100%;
@@ -232,18 +319,17 @@ export default{
         .player-animation-pan{
           width:280px;
           height:280px;
-          background:url("../../assets/image/pan.png") no-repeat;
-          background-size: 100% 100%;
+          background:url("../../assets/image/pan.png") no-repeat center center;
+          background-size: 101% 101%;
+          border-radius:50%;
+          overflow:hidden;
           display: flex;
           justify-content: center;
           align-items: center;
           position:absolute;
-          top:calc(~"50% - 140px");
+          top:calc(~"50% - 130px");
           left:calc(~"50% - 140px");
-          -webkit-animation: disketteRotate 20s linear infinite;
-          -moz-animation: disketteRotate 20s linear infinite;
-          -o-animation: disketteRotate 20s linear infinite;
-          animation: disketteRotate 20s linear infinite;
+          //.animation(rotate,20s,linear,infinite);
           -webkit-animation-play-state: running;
           -moz-animation-play-state: running;
           -o-animation-play-state: running;
@@ -255,8 +341,8 @@ export default{
             animation-play-state: paused;
           }
           img{
-            width:200px;
-            height:200px;
+            width:210px;
+            height:210px;
             border-radius:50%;
             overflow:hidden;
           }
@@ -310,10 +396,14 @@ export default{
           }
           .player-progress-play{
             width:0%;
+            padding:0 5px;
+            box-sizing: border-box;
             height:6px;
             background-color:@color-red;
             border-radius:3px;
             position: absolute;
+            left:0px;
+            top:0px;
             .player-progress-loading{
               position: absolute;
               right:0px;
@@ -321,7 +411,8 @@ export default{
               width:16px;
               height:16px;
               border-radius:50%;
-              background-color:#FFF;
+              background:url("../../assets/image/loading.gif") no-repeat center center;
+              background-size: 100% 100%;
             }
             .play-progress-btn{
               position: absolute;
@@ -373,52 +464,4 @@ export default{
   }
 }
 
-@-webkit-keyframes disketteRotate {
-    from {
-      -webkit-transform: rotate3d(0, 0, 1, 0deg);
-      -moz-transform: rotate3d(0, 0, 1, 0deg);
-      -ms-transform: rotate3d(0, 0, 1, 0deg);
-      -o-transform: rotate3d(0, 0, 1, 0deg);
-      transform: rotate3d(0, 0, 1, 0deg);
-    }
-    to {
-      -webkit-transform: rotate3d(0, 0, 1, 360deg);
-      -moz-transform: rotate3d(0, 0, 1, 360deg);
-      -ms-transform: rotate3d(0, 0, 1, 360deg);
-      -o-transform: rotate3d(0, 0, 1, 360deg);
-      transform: rotate3d(0, 0, 1, 360deg);
-    }
-  }
-  @-moz-keyframes disketteRotate {
-      from {
-        -webkit-transform: rotate3d(0, 0, 1, 0deg);
-        -moz-transform: rotate3d(0, 0, 1, 0deg);
-        -ms-transform: rotate3d(0, 0, 1, 0deg);
-        -o-transform: rotate3d(0, 0, 1, 0deg);
-        transform: rotate3d(0, 0, 1, 0deg);
-      }
-      to {
-        -webkit-transform: rotate3d(0, 0, 1, 360deg);
-        -moz-transform: rotate3d(0, 0, 1, 360deg);
-        -ms-transform: rotate3d(0, 0, 1, 360deg);
-        -o-transform: rotate3d(0, 0, 1, 360deg);
-        transform: rotate3d(0, 0, 1, 360deg);
-      }
-    }
-  @keyframes disketteRotate {
-    from {
-      -webkit-transform: rotate3d(0, 0, 1, 0deg);
-      -moz-transform: rotate3d(0, 0, 1, 0deg);
-      -ms-transform: rotate3d(0, 0, 1, 0deg);
-      -o-transform: rotate3d(0, 0, 1, 0deg);
-      transform: rotate3d(0, 0, 1, 0deg);
-    }
-    to {
-      -webkit-transform: rotate3d(0, 0, 1, 360deg);
-      -moz-transform: rotate3d(0, 0, 1, 360deg);
-      -ms-transform: rotate3d(0, 0, 1, 360deg);
-      -o-transform: rotate3d(0, 0, 1, 360deg);
-      transform: rotate3d(0, 0, 1, 360deg);
-    }
-  }
 </style>
