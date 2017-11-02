@@ -1,20 +1,20 @@
 <template>
   <div class="play-list">
 
-    <mt-header fixed :title="banner.name">
+    <mt-header fixed :title="lists.name">
       <mt-button icon="back" slot="left" @click="$router.back(-1)"></mt-button>
       <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
 
     <div class="part-swipe">
-      <img class="bg-img" :src="banner.coverImgUrl"/>
+      <img class="bg-img" :src="lists.coverImgUrl"/>
       <div class="swipe-box">
         <mt-swipe :auto="0" :show-indicators="false">
           <mt-swipe-item>
-            <img class="swipe-img" :src="banner.coverImgUrl"/>
+            <img class="swipe-img" :src="lists.coverImgUrl"/>
             <p>
-              <b class="t1"><i class="fa-adn"></i>{{banner.name}}</b>
-              <b class="t2">{{banner.description}}</b>
+              <b class="t1"><i class="fa-adn"></i>{{lists.name}}</b>
+              <b class="t2">{{lists.description}}</b>
             </p>
           </mt-swipe-item>
         </mt-swipe>
@@ -22,15 +22,15 @@
       <el-row class="icon-btn">
         <el-col :span="6">
           <i class="fa-calendar-plus-o"></i>
-          <p>{{banner.subscribedCount < 10000 ? banner.subscribedCount : parseInt(banner.subscribedCount/10000) + '万'}}</p>
+          <p>{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-comments"></i>
-          <p>{{banner.commentCount < 10000 ? banner.commentCount : parseInt(banner.commentCount/10000) + '万'}}</p>
+          <p>{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
-          <p>{{banner.shareCount < 10000 ? banner.shareCount : parseInt(banner.shareCount/10000) + '万'}}</p>
+          <p>{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-download"></i>
@@ -69,7 +69,7 @@
 
 <script>
 import {mapState ,mapMutations ,mapActions} from 'vuex';
-import { Actionsheet } from 'mint-ui';
+import { Actionsheet , Indicator} from 'mint-ui';
 
 export default {
   data () {
@@ -80,19 +80,31 @@ export default {
         {name:'收藏到歌单',method:''},
         {name:'下载',method:''}
       ],
-      banner:[],
-      playlist:[],
       id:this.$route.params.id,
       List:[]
     }
   },
   created() {
-      this.getPlaylist();
+      if(this.listsID != this.id){
+        Indicator.open({
+          spinnerType: 'fading-circle'
+        });
+        this.getPlaylist();
+      }
   },
   computed: {
     ...mapState([
-      'musicInfo',"playerList"
-    ])
+      'musicInfo',"playerList","playList"
+    ]),
+    listsID() {
+      return this.playList.listsID;
+    },
+    lists() {
+      return this.playList.lists;
+    },
+    playlist() {
+      return this.playList.lists.tracks;
+    }
   },
   methods: {
     MusicPlay(item) {
@@ -110,18 +122,23 @@ export default {
       }
       let url = this.HOST + '/playlist/detail';
       this.axios.get(url,{params}).then(res => {
-        this.banner = res.data.playlist;
-        this.playlist = res.data.playlist.tracks;
-
-        for(var i = 0; i < this.playlist.length; i++){
-          let obj = {
-            title : this.playlist[i].name,
-            author : this.playlist[i].ar[0].name,
-            id : this.playlist[i].id,
-            pic : this.playlist[i].al.picUrl
-          }
-          this.List.push(obj);
+        let L = {
+          listsID:this.id,
+          lists:res.data.playlist
         }
+        this.$store.commit("setPlayLists", L);
+        this.$nextTick(() => {
+          Indicator.close();
+          for(var i = 0; i < this.playlist.length; i++){
+            let obj = {
+              title : this.playlist[i].name,
+              author : this.playlist[i].ar[0].name,
+              id : this.playlist[i].id,
+              pic : this.playlist[i].al.picUrl
+            }
+            this.List.push(obj);
+          }
+        })
       });
     },
     addListToPlayerList(){

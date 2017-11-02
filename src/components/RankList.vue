@@ -102,10 +102,16 @@ export default {
   },
   computed:{
     ...mapState([
-      'musicInfo',"playerList","ranks","ranksID"
+      'musicInfo',"playerList","rankList"
     ]),
+    ranksID() {
+      return this.rankList.ranksID;
+    },
+    ranks() {
+      return this.rankList.ranks;
+    },
     rank() {
-      return this.ranks.tracks;
+      return this.rankList.ranks.tracks;
     }
   },
   methods: {
@@ -129,7 +135,6 @@ export default {
           ranks:res.data.result
         }
         this.$store.commit("setRanks", R);
-        console.log(res.data.result)
         this.$nextTick(() => {
           Indicator.close();
           for(var i = 0; i < this.rank.length; i++){

@@ -55,8 +55,13 @@ export default {
   },
   //排行存储
   setRanks(state, data) {
-    state.ranksID = data.ranksID;
-    state.ranks = data.ranks;
+    state.rankList.ranksID = data.ranksID;
+    state.rankList.ranks = data.ranks;
+  },
+  //歌单存储
+  setPlayLists(state, data) {
+    state.playList.listsID = data.listsID;
+    state.playList.lists = data.lists;
   },
   //底部播放器是否显示
   playerShow(state, data) {

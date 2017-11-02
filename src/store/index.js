@@ -26,8 +26,14 @@ const state = {
   //List
   musics:[],
   //ranks
-  ranksID:'',
-  ranks:[],
+  rankList:{
+    ranksID:'',
+    ranks:[]
+  },
+  playList:{
+    listsID:'',
+    lists:[]
+  },
   //search
   searchTxt:'', //检索词
   historys:[], //搜索历史
