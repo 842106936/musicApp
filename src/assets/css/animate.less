@@ -39,17 +39,6 @@
   backface-visibility: hidden;
 }
 
-.app-view2{
-  position: absolute;
-  top: 0;
-  width: 100%;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
 
 .slide-left-enter-active {
   -webkit-animation-name: slideInLeft;
@@ -68,6 +57,8 @@
   animation-name: slideOutLeft;
 }
 .slide-bottom-enter-active {
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
   -webkit-animation-name: slideInBottom;
   animation-name: slideInBottom;
 }
@@ -75,7 +66,6 @@
   -webkit-animation-name: slideOutBottom;
   animation-name: slideOutBottom;
 }
-
 // Slide
 @-webkit-keyframes slideInLeft {
   from {
@@ -229,8 +219,8 @@
 
   to {
     visibility: hidden;
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
   }
 
 }
@@ -243,8 +233,8 @@
 
   to {
     visibility: hidden;
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
   }
 
 }

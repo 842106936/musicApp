@@ -151,13 +151,13 @@ router.beforeEach((to, from, next) => {
   const fromIndex = list.indexOf(fromName);   // 离开下标
   let direction = '';
   if (toIndex > -1 && fromIndex > -1) {   // 如果下标都存在
-    if (toIndex < fromIndex) {          // 如果进入的下标小于离开的下标，那么是左滑
+    if (toIndex < fromIndex) {  // 如果进入的下标小于离开的下标，那么是左滑
       direction = 'left'
     } else {
-      direction = 'right'         // 如果进入的下标大于离开的下标，那么是右滑
+      direction = 'right' // 如果进入的下标大于离开的下标，那么是右滑
     }
     store.commit("playerShow",true);
-  }else if (toName == '/player' || from == '/player') {
+  }else if (toName == '/player') {
     direction = 'slide-bottom'
     store.commit("playerShow",false);
   }else{

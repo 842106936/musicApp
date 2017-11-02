@@ -72,15 +72,17 @@
     </mt-cell>
     <el-row :gutter="5">
       <el-col :xs="8" :sm="8" :md="6" :lg="4" v-for="(newmusic, index) in newmusics" :key="newmusic.id">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="image">
-            <div>
-              <img v-lazy="newmusic.picUrl"/>
+        <router-link :to="{ name: 'PlayList', params: { id: newmusic.id }}">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="image">
+              <div>
+                <img v-lazy="newmusic.picUrl"/>
+              </div>
             </div>
-          </div>
-          <p class="name">{{newmusic.name}}</p>
-          <p class="author">{{newmusic.artists[0].name}}</p>
-        </el-card>
+            <p class="name">{{newmusic.name}}</p>
+            <p class="author">{{newmusic.artists[0].name}}</p>
+          </el-card>
+        </router-link>
       </el-col>
     </el-row>
   </div>
@@ -164,10 +166,6 @@ export default{
   },
   created() {
       if(this.banners.length == 0){
-        // Indicator.open({
-        //   text: '加载中...',
-        //   spinnerType: 'fading-circle'
-        // });
         this.getBanners();
         this.getSheets();
         this.getSoles();

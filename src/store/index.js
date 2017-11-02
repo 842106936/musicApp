@@ -25,6 +25,9 @@ const state = {
   radioCategorys:[],
   //List
   musics:[],
+  //ranks
+  ranksID:'',
+  ranks:[],
   //search
   searchTxt:'', //检索词
   historys:[], //搜索历史

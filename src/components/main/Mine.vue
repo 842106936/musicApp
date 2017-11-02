@@ -116,7 +116,6 @@ export default{
       let url = this.HOST + '/user/detail';
       this.axios.get(url,{params}).then(res => {
         this.playlistCount = res.data.profile.playlistCount;
-        this.follows = res.data.profile.follows;
       });
     },
     getPlayList() {
@@ -126,6 +125,7 @@ export default{
       let url = this.HOST + '/user/playlist';
       this.axios.get(url,{params}).then(res => {
         this.playlist = res.data.playlist;
+        this.follows = res.data.playlist.length - 1;
       });
     }
   }

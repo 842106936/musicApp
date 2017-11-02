@@ -220,12 +220,10 @@ export default{
 
 .player{
   width:100%;
-  position: relative;
   overflow:hidden;
   position: absolute;
   top: 0;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  left:0;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
   -webkit-backface-visibility: hidden;

@@ -53,6 +53,12 @@ export default {
   searchList(state, data) {
     state.searchList = data;
   },
+  //排行存储
+  setRanks(state, data) {
+    state.ranksID = data.ranksID;
+    state.ranks = data.ranks;
+  },
+  //底部播放器是否显示
   playerShow(state, data) {
     state.playerShow = data;
   },

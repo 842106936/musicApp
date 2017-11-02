@@ -1,20 +1,20 @@
 <template>
   <div class="rank-list">
 
-    <mt-header fixed :title="banner.name">
+    <mt-header fixed :title="ranks.name">
       <mt-button icon="back" slot="left" @click="$router.back(-1)"></mt-button>
       <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
 
     <div class="part-swipe">
-      <img class="bg-img" :src="banner.coverImgUrl"/>
+      <img class="bg-img" :src="ranks.coverImgUrl"/>
       <div class="swipe-box">
         <mt-swipe :auto="0" :show-indicators="false">
           <mt-swipe-item>
-            <img class="swipe-img" :src="banner.coverImgUrl"/>
+            <img class="swipe-img" :src="ranks.coverImgUrl"/>
             <p>
-              <b class="t1"><i class="fa-adn"></i>{{banner.name}}</b>
-              <b class="t2">{{banner.description}}</b>
+              <b class="t1"><i class="fa-adn"></i>{{ranks.name}}</b>
+              <b class="t2">{{ranks.description}}</b>
             </p>
           </mt-swipe-item>
         </mt-swipe>
@@ -22,15 +22,15 @@
       <el-row class="icon-btn">
         <el-col :span="6">
           <i class="fa-calendar-plus-o"></i>
-          <p>{{banner.subscribedCount < 10000 ? banner.subscribedCount : parseInt(banner.subscribedCount/10000) + '万'}}</p>
+          <p>{{ranks.subscribedCount < 10000 ? ranks.subscribedCount : parseInt(ranks.subscribedCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-comments"></i>
-          <p>{{banner.commentCount < 10000 ? banner.commentCount : parseInt(banner.commentCount/10000) + '万'}}</p>
+          <p>{{ranks.commentCount < 10000 ? ranks.commentCount : parseInt(ranks.commentCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
-          <p>{{banner.shareCount < 10000 ? banner.shareCount : parseInt(banner.shareCount/10000) + '万'}}</p>
+          <p>{{ranks.shareCount < 10000 ? ranks.shareCount : parseInt(ranks.shareCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-download"></i>
@@ -46,7 +46,7 @@
     </div>
     <div class="music-list">
       <ul>
-        <li v-for="(item,index) in ranks" :key="item.id" @click="MusicPlay(item)">
+        <li v-for="(item,index) in rank" :key="item.id" @click="MusicPlay(item)">
           <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
             <div class="rank-index">
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { Actionsheet } from 'mint-ui';
+import { Actionsheet, Indicator } from 'mint-ui';
 import {mapState ,mapMutations ,mapActions} from 'vuex';
 
 export default {
@@ -82,14 +82,17 @@ export default {
         {name:'收藏到歌单',method:''},
         {name:'下载',method:''}
       ],
-      banner:[],
-      ranks:[],
       idx:this.$route.params.idx,
       List:[]
     }
   },
   created() {
+    if(this.ranksID != this.idx){
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      });
       this.getRanks();
+    }
   },
   filters: {
     rankChange(num,index) {
@@ -99,8 +102,11 @@ export default {
   },
   computed:{
     ...mapState([
-      'musicInfo',"playerList"
-    ])
+      'musicInfo',"playerList","ranks","ranksID"
+    ]),
+    rank() {
+      return this.ranks.tracks;
+    }
   },
   methods: {
     MusicPlay(item) {
@@ -118,18 +124,24 @@ export default {
       }
       let url = this.HOST + '/top/list';
       this.axios.get(url,{params}).then(res => {
-        this.banner = res.data.result;
-        this.ranks = res.data.result.tracks;
-
-        for(var i = 0; i < this.ranks.length; i++){
-          let obj = {
-            title : this.ranks[i].name,
-            author : this.ranks[i].artists[0].name,
-            id : this.ranks[i].id,
-            pic : this.ranks[i].album.picUrl
-          }
-          this.List.push(obj);
+        let R = {
+          ranksID:this.idx,
+          ranks:res.data.result
         }
+        this.$store.commit("setRanks", R);
+        console.log(res.data.result)
+        this.$nextTick(() => {
+          Indicator.close();
+          for(var i = 0; i < this.rank.length; i++){
+            let obj = {
+              title : this.rank[i].name,
+              author : this.rank[i].artists[0].name,
+              id : this.rank[i].id,
+              pic : this.rank[i].album.picUrl
+            }
+            this.List.push(obj);
+          }
+        })
       });
     },
     addListToPlayerList(){
