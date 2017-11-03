@@ -5,7 +5,7 @@
 >使用VUE全家桶：vue +　vuex + vue-router + axios +es6 开发，
 >使用的UI框架：ElementUI + MintUI
  
- 调用https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=neteasecloudmusicapi node接口，
+>调用https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=neteasecloudmusicapi node接口，
 
 >主要的功能完成的有：
 >用户登录，
