@@ -3,7 +3,7 @@
 > 仿网易云音乐app的VUE项目
 
 
->使用VUE全家桶：vue +　vuex + vue-router + axios +es6 开发
+>使用VUE全家桶：vue + vuex + vue-router + axios + es6 + less 开发
 
 >使用的UI框架：ElementUI + MintUI
 
