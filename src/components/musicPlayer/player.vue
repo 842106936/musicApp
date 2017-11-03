@@ -22,13 +22,17 @@
           <div class="songsInfo">
             <el-row :gutter="5">
               <el-col :span="6">
-                <i class="fa-heart" @click="likeSong"></i>
+                <i class="fa-heart" :style="{'color': fontcolor}" @click="likeSong"></i>
               </el-col>
               <el-col :span="6">
-                <a :href="musicInfo.url"><i class="fa-download"></i></a>
+                <a :href="musicURL" :download="musicInfo.title"><i class="fa-download"></i></a>
               </el-col>
               <el-col :span="6">
-                <router-link to="/"><i class="fa-comments-o"></i></router-link>
+                <router-link to="/">
+                  <el-badge :value="commentNum" :max="999">
+                    <i class="fa-comments-o"></i>
+                  </el-badge>
+                </router-link>
               </el-col>
               <el-col :span="6">
                 <i class="fa-ellipsis-v"></i>
@@ -78,6 +82,8 @@ export default{
   name:'player',
   data() {
     return {
+      commentNum:'',
+      fontcolor:'#fff',
       showPlayerList:false,
       playerLyricShow:false,
       screenHeight:{
@@ -87,7 +93,7 @@ export default{
   },
   computed: {
     ...mapState([
-      "musicInfo","isBuffering","playerMode","playStatus","songCurrentTime","songDuration"
+      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","commentOffset"
     ]),
     playWidth() {
       return (this.songCurrentTime/this.songDuration)*100;
@@ -107,10 +113,25 @@ export default{
   components:{
     'player-list':playerList
   },
+  created() {
+      this.getCommentNum();
+  },
   methods: {
     ...mapMutations([
       "changePlayerMode"
     ]),
+    getCommentNum() {
+      let params = {
+        id: this.musicInfo.id,
+        limit: 20,
+        offset: this.commentOffset
+      }
+      let url = this.HOST + '/comment/music'
+      this.axios.get(url,{params}).then(res => {
+        this.commentNum = res.data.total;
+        this.$store.commit("comment",res.data);
+      })
+    },
     btnPrev() {
       this.$store.dispatch("prevMusic");
     },
@@ -121,7 +142,15 @@ export default{
       this.$store.dispatch("autoNextMusic");
     },
     likeSong() {
-
+      let params = {
+        id: this.musicInfo.id
+      }
+      let url = this.HOST + '/like'
+      this.axios.get(url,{params}).then(res => {
+        if(res.code == 200){
+          this.fontcolor = '#d7141e'
+        }
+      })
     },
     close() {
       this.showPlayerList=false;
@@ -169,6 +198,7 @@ export default{
     transform: rotate3d(0, 0, 1, 360deg);
   }
 }
+.player .el-badge__content{background-color:inherit !important; border:0px !important;}
 </style>
 
 <style lang="less" rel="stylesheet/less" scoped>
@@ -461,5 +491,4 @@ export default{
     }
   }
 }
-
 </style>

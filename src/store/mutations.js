@@ -55,8 +55,13 @@ export default {
   },
   //排行存储
   setRanks(state, data) {
-    state.ranksID = data.ranksID;
-    state.ranks = data.ranks;
+    state.rankList.ranksID = data.ranksID;
+    state.rankList.ranks = data.ranks;
+  },
+  //歌单存储
+  setPlayLists(state, data) {
+    state.playList.listsID = data.listsID;
+    state.playList.lists = data.lists;
   },
   //底部播放器是否显示
   playerShow(state, data) {
@@ -77,6 +82,10 @@ export default {
   //当前播放歌曲信息
   musicInfo(state, data) {
     state.musicInfo = data
+  },
+  //当前播放url
+  musicURL(state, data) {
+    state.musicURL = data
   },
   //音频是否播放
   playStatus(state, data) {
@@ -125,5 +134,13 @@ export default {
     }else if(state.playerMode == 'Single'){
       state.playerMode = 'Recycle';
     }
+  },
+  //评论分页的当前页
+  commentOffset(state, data) {
+    state.commentOffset = data;
+  },
+  //评论
+  commentOffset(state, data) {
+    state.commentOffset = data;
   }
 }

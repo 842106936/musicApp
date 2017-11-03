@@ -88,9 +88,11 @@ export default{
         })
       })
       .then(() => {
+        this.$store.commit("musicURL",this.songs.url);
         document.querySelector('#audio').play();
         this.$store.commit("playStatus",true);
       })
+      //判断播放列表中是否已经含有点击的歌曲
       .then(() => {
         const arr = new Array;
         for(var i=0;i<this.playerList.List.length;i++){
@@ -109,6 +111,7 @@ export default{
     close() {
       this.showPlayerList=false;
     },
+    //播放器播放,暂停控制
     btnPlay() {
       if(this.playStatus){
         document.querySelector('#audio').pause();
@@ -118,19 +121,24 @@ export default{
         this.$store.commit("playStatus",true);
       }
     },
+    //自动播放下一首
     autoPlayNext() {
       this.$store.dispatch("autoNextMusic");
       console.log("播放结束")
     },
+    //音乐总时长
     songDuration() {
       this.$store.commit("songDuration",this.audio.duration);
     },
+    //当前播放时长
     songCurrentTime() {
       this.$store.commit("songCurrentTime",this.audio.currentTime);
     },
+    //音频文件加载完成
     bufferingTrue() {
       this.$store.commit("isBuffering",true);
     },
+    //音频文件加载未完成
     bufferingFalse() {
       this.$store.commit("isBuffering",false);
     }
