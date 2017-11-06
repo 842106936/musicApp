@@ -34,7 +34,11 @@ const state = {
     listsID:'',
     lists:[]
   },
+<<<<<<< HEAD
   //检索
+=======
+  //search
+>>>>>>> e3dcb931f5fc9ae042a849d952b99850503d7323
   searchTxt:'', //检索词
   historys:[], //搜索历史
   searchList:[], //热门搜索
