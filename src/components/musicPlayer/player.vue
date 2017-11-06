@@ -29,7 +29,7 @@
               </el-col>
               <el-col :span="6">
                 <router-link to="/">
-                  <el-badge :value="commentNum" :max="999">
+                  <el-badge :value="comment.total" :max="999">
                     <i class="fa-comments-o"></i>
                   </el-badge>
                 </router-link>
@@ -128,7 +128,6 @@ export default{
       }
       let url = this.HOST + '/comment/music'
       this.axios.get(url,{params}).then(res => {
-        this.commentNum = res.data.total;
         this.$store.commit("comment",res.data);
       })
     },
