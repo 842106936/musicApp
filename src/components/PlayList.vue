@@ -102,11 +102,7 @@ export default {
     lists() {
       return this.playList.lists;
     },
-<<<<<<< HEAD
     plist() {
-=======
-    playlist() {
->>>>>>> e3dcb931f5fc9ae042a849d952b99850503d7323
       return this.playList.lists.tracks;
     }
   },
@@ -133,21 +129,12 @@ export default {
         this.$store.commit("setPlayLists", L);
         this.$nextTick(() => {
           Indicator.close();
-<<<<<<< HEAD
           for(var i = 0; i < this.plist.length; i++){
             let obj = {
               title : this.plist[i].name,
               author : this.plist[i].ar[0].name,
               id : this.plist[i].id,
               pic : this.plist[i].al.picUrl
-=======
-          for(var i = 0; i < this.playlist.length; i++){
-            let obj = {
-              title : this.playlist[i].name,
-              author : this.playlist[i].ar[0].name,
-              id : this.playlist[i].id,
-              pic : this.playlist[i].al.picUrl
->>>>>>> e3dcb931f5fc9ae042a849d952b99850503d7323
             }
             this.List.push(obj);
           }
