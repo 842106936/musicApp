@@ -25,7 +25,7 @@
                 <b>{{item.user.nickname}}</b>
                 <em>{{item.time | dateType}}</em>
               </p>
-              <span :class="{'liked':item.liked == 'true'}" @click.stop="like(item)">
+              <span :class="{'liked':item.liked == true}" @click.stop="like(item)">
                 <b>{{item.likedCount}}</b>
                 <i class="fa-thumbs-up"></i>
               </span>
