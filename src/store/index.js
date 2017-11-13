@@ -52,8 +52,11 @@ const state = {
     List:[] //播放列表
   },
   //评论
-  commentOffset:0, //评论分页的当前页数
-  comment:[] //评论
+  comment:{
+    commentsTotal:'', //评论数
+    hotComments:[], //热门评论
+    comments:[] //最新评论
+  } //评论
 }
 
 

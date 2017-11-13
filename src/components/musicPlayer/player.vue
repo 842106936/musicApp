@@ -28,8 +28,8 @@
                 <a :href="musicURL" :download="musicInfo.title"><i class="fa-download"></i></a>
               </el-col>
               <el-col :span="6">
-                <router-link to="/">
-                  <el-badge :value="comment.total" :max="999">
+                <router-link to="/comment">
+                  <el-badge :value="comment.commentsTotal" :max="999">
                     <i class="fa-comments-o"></i>
                   </el-badge>
                 </router-link>
@@ -82,7 +82,6 @@ export default{
   name:'player',
   data() {
     return {
-      commentNum:'',
       fontcolor:'#fff',
       showPlayerList:false,
       playerLyricShow:false,
@@ -91,15 +90,18 @@ export default{
       }
     }
   },
+  created() {
+      this.getComment();
+  },
   computed: {
     ...mapState([
-      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","commentOffset"
+      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","comment"
     ]),
     playWidth() {
       return (this.songCurrentTime/this.songDuration)*100;
     },
     screenHeigth() {
-      return window.screen.availHeight  + 'px';
+      return window.screen.availHeight + 'px';
     }
   },
   filters: {
@@ -113,24 +115,10 @@ export default{
   components:{
     'player-list':playerList
   },
-  created() {
-      this.getCommentNum();
-  },
   methods: {
     ...mapMutations([
       "changePlayerMode"
     ]),
-    getCommentNum() {
-      let params = {
-        id: this.musicInfo.id,
-        limit: 20,
-        offset: this.commentOffset
-      }
-      let url = this.HOST + '/comment/music'
-      this.axios.get(url,{params}).then(res => {
-        this.$store.commit("comment",res.data);
-      })
-    },
     btnPrev() {
       this.$store.dispatch("prevMusic");
     },
@@ -139,6 +127,9 @@ export default{
     },
     btnNext() {
       this.$store.dispatch("autoNextMusic");
+    },
+    close() {
+      this.showPlayerList=false;
     },
     likeSong() {
       let params = {
@@ -151,8 +142,19 @@ export default{
         }
       })
     },
-    close() {
-      this.showPlayerList=false;
+    getComment() {
+      let params = {
+        id: this.musicInfo.id,
+        limit: 20,
+        offset: 0
+      }
+      let url = this.HOST + '/comment/music'
+      this.axios.get(url,{params}).then(res => {
+        this.$store.commit("addCommentsTotal",res.data.total);
+        this.$store.commit("addHotComments",res.data.hotComments);
+        console.log(res.data.hotComments);
+        this.$store.commit("addComments",res.data.comments);
+      })
     }
   }
 }

@@ -135,12 +135,16 @@ export default {
       state.playerMode = 'Recycle';
     }
   },
-  //评论分页的当前页
-  commentOffset(state, data) {
-    state.commentOffset = data;
+  //评论数
+  addCommentsTotal(state, data) {
+    state.comment.commentsTotal = data;
   },
-  //评论
-  commentOffset(state, data) {
-    state.commentOffset = data;
+  //热门评论
+  addHotComments(state, data) {
+    state.comment.hotComments = data;
+  },
+  //最新评论
+  addComments(state, data) {
+    state.comment.comments = data;
   }
 }
