@@ -30,7 +30,7 @@
                 <i class="fa-thumbs-up"></i>
               </span>
             </div>
-            <p>{{item.content}}</p>
+            <p class="txt">{{item.content}}</p>
           </li>
         </ul>
       </div>
@@ -49,7 +49,7 @@
                 <i class="fa-thumbs-up"></i>
               </span>
             </div>
-            <p>{{item.content}}</p>
+            <p class="txt">{{item.content}}</p>
           </li>
         </ul>
         <p class="loadTips" v-if="loading">
@@ -290,12 +290,12 @@ export default{
             }
           }
         }
-        p{
+        p.txt{
           width:calc(~'100% - 70px');
           float:right;
           font:14px/24px '微软雅黑';
           color:#333;
-          padding:0 10px 5px 0;
+          padding:0px 10px 5px 0;
           border-bottom:1px solid #f2f2f2;
         }
       }
