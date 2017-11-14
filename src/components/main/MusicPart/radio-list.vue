@@ -5,7 +5,7 @@
   </mt-cell>
   <el-row :gutter="5">
     <el-col v-if="index < showNum || showNum == true" :xs="8" :sm="8" :md="6" :lg="4" v-for="(item, index) in radioLists" :key="item.id">
-      <el-card :body-style="{ padding: '0px' }">
+      <el-card :body-style="{ padding: '0px' }" @click="djDetail(item.id)">
         <div class="image">
           <div>
             <img v-lazy="item.picUrl"/>
@@ -42,6 +42,16 @@ export default{
       this.axios.get(url,{params}).then(res => {
         this.radioLists = res.data.djRadios;
       });
+    },
+    djDetail(id) {
+      // 获取电台节目列表
+      // let params = {
+      //   rid: id
+      // }
+      // let url = this.HOST + '/dj/program';
+      // this.axios.get(url,{params}).then(res => {
+      //   this.$store.commit('djList',res.data.programs)
+      // })
     }
   }
 }

@@ -13,13 +13,29 @@
 
   <div class="part-nav">
     <el-row>
-      <el-col :span="8" v-for="nav in circles" :key="nav.title">
-        <router-link :to="nav.link">
+      <el-col :span="8">
+        <a @click="goPersonFM">
           <p>
-            <i class="iconfont" :class="nav.icon"></i>
+            <i class="iconfont icon-fm"></i>
+          </p>
+        </a>
+        <b>私人FM</b>
+      </el-col>
+      <el-col :span="8">
+        <router-link to="/List">
+          <p>
+            <i class="iconfont icon-rili"></i>
           </p>
         </router-link>
-        <b>{{nav.title}}</b>
+        <b>每日歌曲推荐</b>
+      </el-col>
+      <el-col :span="8">
+        <router-link to="/RankList/1">
+          <p>
+            <i class="iconfont icon-paihangbang"></i>
+          </p>
+        </router-link>
+        <b>云音乐热歌榜</b>
       </el-col>
     </el-row>
   </div>
@@ -156,12 +172,7 @@ export default{
   name: 'recommend',
   data() {
     return {
-      topStatus: '',
-      circles:[
-        {title: '私人FM', icon: 'icon-fm', link: '/Show'},
-        {title: '每日歌曲推荐', icon: 'icon-rili', link: '/List'},
-        {title: '云音乐热歌榜', icon: 'icon-paihangbang', link: '/RankList/1'}
-      ]
+      topStatus: ''
     }
   },
   created() {
@@ -196,6 +207,21 @@ export default{
       this.axios.get(url).then(res => {
         this.$store.commit('banners',res.data.banners);
       });
+    },
+    //私人FM
+    goPersonFM() {
+      let url = this.HOST + '/personal_fm';
+      this.axios.get(url).then(res => {
+        //this.$store.commit('personFM',res.data.data[0]);
+        let dj = {
+          id: res.data.data[0].id,
+          title: res.data.data[0].name,
+          author: res.data.data[0].artists[0].name,
+          pic: res.data.data[0].artists[0].picUrl
+        }
+        this.$store.dispatch('musicInfo', dj);
+        this.$router.push({ path:'/player' });
+      })
     },
     // 格式化请求
     // qs.stringify(params)
