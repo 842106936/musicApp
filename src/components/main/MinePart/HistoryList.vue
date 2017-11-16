@@ -14,7 +14,7 @@
       <ul>
         <li v-for="item in historys" :key="item.song.id" @click="MusicPlay(item)">
           <div class="info">
-            <p class="name"><b>{{item.song.name}}</b></p>
+            <p class="name"><b :class="{'active': item.song.id == musicInfo.id}">{{item.song.name}}</b></p>
             <p class="author">{{item.song.ar[0].name}}</p>
           </div>
           <i class="fa-ellipsis-v" @click.stop="sheetVisible = true"></i>
@@ -112,6 +112,9 @@ export default {
           b{
             font-size:@font-size*1.1;
             font-weight:bold;
+            &.active{
+              color:@color-red;
+            }
           }
           em{
             font-size:@font-size*1.1;

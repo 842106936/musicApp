@@ -63,6 +63,12 @@ export default {
     state.playList.listsID = data.listsID;
     state.playList.lists = data.lists;
   },
+  //电台存储
+  setDJinfo(state, data) {
+    state.djInfo.djID = data.id;
+    state.djInfo.djRadio = data.djRadio;
+    state.djInfo.djList = data.djList;
+  },
   //底部播放器是否显示
   playerShow(state, data) {
     state.playerShow = data;
@@ -134,6 +140,9 @@ export default {
     }else if(state.playerMode == 'Single'){
       state.playerMode = 'Recycle';
     }
+  },
+  commentType(state, data) {
+    state.commentType = data;
   },
   //评论数
   addCommentsTotal(state, data) {

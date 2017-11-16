@@ -70,6 +70,7 @@ export default {
   },
   methods: {
     MusicPlay(item) {
+      this.$store.commit("commentType",'music');
       let arr = {
         title : item.name,
         author : item.artists[0].name,

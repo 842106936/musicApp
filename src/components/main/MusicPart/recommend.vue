@@ -70,14 +70,14 @@
     <mt-cell title="独家放送" to="/Mine" is-link>
     </mt-cell>
     <el-row :gutter="5">
-      <el-col v-for="(sole, index) in soles" :span="index==2 ? 24 : 12" :key="sole.id">
-        <el-card :body-style="{ padding: '0px' }">
+      <el-col v-for="(item, index) in soles" :span="index==2 ? 24 : 12" :key="item.id">
+        <el-card :body-style="{ padding: '0px' }" @click="goPlayer(item)">
           <div class="image">
             <div>
-              <img v-lazy="sole.picUrl"/>
+              <img v-lazy="item.picUrl"/>
             </div>
           </div>
-          <p class="name">{{sole.name}}</p>
+          <p class="name">{{item.name}}</p>
         </el-card>
       </el-col>
     </el-row>
@@ -172,7 +172,8 @@ export default{
   name: 'recommend',
   data() {
     return {
-      topStatus: ''
+      topStatus: '', //下拉刷新的状态
+      DJarr:[] //私人FM
     }
   },
   created() {
@@ -213,18 +214,25 @@ export default{
       let url = this.HOST + '/personal_fm';
       this.axios.get(url).then(res => {
         //this.$store.commit('personFM',res.data.data[0]);
-        let dj = {
-          id: res.data.data[0].id,
-          title: res.data.data[0].name,
-          author: res.data.data[0].artists[0].name,
-          pic: res.data.data[0].artists[0].picUrl
+        for(var i=0;i<res.data.data.length;i++){
+          let dj = {
+            id: res.data.data[i].id,
+            title: res.data.data[i].name,
+            author: res.data.data[i].artists[0].name,
+            pic: res.data.data[i].artists[0].picUrl
+          }
+          this.DJarr.push(dj);
         }
-        this.$store.dispatch('musicInfo', dj);
-        this.$router.push({ path:'/player' });
+        this.$nextTick(() => {
+          this.$store.commit('addListToPlayerList', this.DJarr);
+          this.$store.dispatch('musicInfo', this.DJarr[0]);
+          this.$store.commit("commentType",'music');
+          this.$router.push({ path:'/player'});
+        })
       })
     },
-    // 格式化请求
-    // qs.stringify(params)
+    // 格式化请求 qs.stringify(params)
+    //获取推荐歌单
     getSheets() {
       let url = this.HOST + '/personalized';
       this.axios.get(url).then(res => {
@@ -234,12 +242,25 @@ export default{
         // })
       });
     },
+    //获取独家放送
     getSoles() {
       let url = this.HOST + '/personalized/privatecontent';
       this.axios.get(url).then(res => {
         this.$store.commit('soles',res.data.result);
       });
     },
+    //独家放送MV播放
+    goPlayer(item) {
+      // let song = {
+      //   id: item.id,
+      //   title: item.name,
+      //   author: "",
+      //   pic: item.picUrl
+      // }
+      // this.$store.dispatch('musicInfo', song);
+      // this.$router.push({ path:'/player' });
+    },
+    //获取最新音乐
     getNewmusics() {
       let params = {
         offset : 0,
@@ -250,28 +271,33 @@ export default{
         this.$store.commit('newmusics',res.data.albums);
       });
     },
+    //获取推荐MV
     getMVs() {
       let url = this.HOST + '/personalized/mv';
       this.axios.get(url).then(res => {
         this.$store.commit('mvs',res.data.result);
       });
     },
+    //获取精选专栏
     getColumns() {
       let url = this.HOST + '/program/recommend';
       this.axios.get(url).then(res => {
         this.$store.commit('columns',res.data.programs);
       });
     },
+    //获取主播电台
     getRadios() {
       let url = this.HOST + '/personalized/djprogram';
       this.axios.get(url).then(res => {
         this.$store.commit('radios',res.data.result);
       });
     },
+    //下拉刷新重新获取推荐歌单
     loadTop() {
       this.getSheets();
       this.$refs.loadmore.onTopLoaded();
     },
+    //下拉刷新的状态
     handleTopChange(status) {
       this.topStatus = status;
     }

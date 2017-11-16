@@ -25,8 +25,10 @@
           <p>{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
-          <i class="fa-comments"></i>
-          <p>{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
+          <router-link :to="{ name: 'comment', params: {id: $route.params.id, type: 'playlist'}}">
+            <i class="fa-comments"></i>
+            <p>{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
+          </router-link>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
@@ -47,10 +49,10 @@
     <div class="music-list">
       <ul>
         <li v-for="(item,index) in plist" :key="item.id" @click="MusicPlay(item)">
-          <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
             <div class="playlist-index">
-              <h3>{{index+1}}</h3>
+              <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
+              <h3 v-else>{{index+1}}</h3>
             </div>
             <div class="playlist-info">
               <p class="name"><b>{{item.name}}</b><em>{{item.alia[0]}}</em></p>
@@ -108,6 +110,7 @@ export default {
   },
   methods: {
     MusicPlay(item) {
+      this.$store.commit("commentType",'music');
       let arr = {
         title : item.name,
         author : item.ar[0].name,
@@ -246,16 +249,12 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .icon{
-        font-size:16px;
-        color:@color-red;
-        font-weight: bold;
-      }
       .info{
         width:90%;
         height:100%;
         display: flex;
         align-items: center;
+
         .playlist-index{
           width:50px;
           height:100%;
@@ -263,6 +262,12 @@ export default {
           flex-direction: column;
           justify-content: center;
           float:left;
+          .icon{
+            font-size:16px;
+            color:@color-red;
+            font-weight: bold;
+            text-align: center;
+          }
           h3{
             text-align: center;
             font-size:@font-size*1.2;

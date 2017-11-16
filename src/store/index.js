@@ -25,14 +25,21 @@ const state = {
   radioCategorys:[],
   //List
   musics:[],
-  //ranks
+  //排行榜详情列表
   rankList:{
     ranksID:'',
     ranks:[]
   },
+  //歌单详情列表
   playList:{
     listsID:'',
     lists:[]
+  },
+  //电台详情列表
+  djInfo:{
+    djID:'',
+    djRadio:[],
+    djList:[]
   },
   searchTxt:'', //检索词
   historys:[], //搜索历史
@@ -51,12 +58,13 @@ const state = {
     id:[], //已加入播放列表的歌单id
     List:[] //播放列表
   },
+  commentType:'', //评论类型
   //评论
   comment:{
     commentsTotal:'', //评论数
     hotComments:[], //热门评论
     comments:[] //最新评论
-  } //评论
+  }
 }
 
 

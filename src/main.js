@@ -27,6 +27,7 @@ import SearchList from './components/SearchMusic/SearchList.vue'
 
 import PlayList from './components/PlayList.vue'
 import RankList from './components/RankList.vue'
+import DJList from './components/DJList.vue'
 
 import Mine from './components/main/Mine.vue'
 import Music from './components/main/Music.vue'
@@ -113,37 +114,42 @@ const router = new Router({
     ]
   },
   {
-    name:'Show',
+    name: 'Show',
     path: '/Show',
     component: Show
   },{
-    name:'List',
+    name: 'List',
     path: '/List',
     component: List
   },
   {
-    name:'PlayList',
+    name: 'PlayList',
     path: '/PlayList/:id',
     component: PlayList
   },
   {
-    name:'RankList',
+    name: 'RankList',
     path: '/RankList/:idx',
     component: RankList
   },
   {
-    name:'historyList',
+    name: 'DJList',
+    path: '/DJList/:id',
+    component: DJList
+  },
+  {
+    name: 'historyList',
     path: '/HistoryList',
     component: historyList
   },
   {
-    name:'player',
+    name: 'player',
     path: '/player',
     component: player
   },
   {
-    name:'comment',
-    path: '/comment',
+    name: 'comment',
+    path: '/comment/:id/:type',
     component: comment
   }]
 })

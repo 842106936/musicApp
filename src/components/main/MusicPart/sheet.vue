@@ -30,7 +30,7 @@
   </div>
 
   <div class="part-sheet">
-    <el-row :gutter="5" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="0">
+    <el-row :gutter="5" v-infinite-scroll="loadMore" infinite-scroll-distance="0">
       <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(item, index) in allSheets" :key="item.id">
         <router-link :to="{ name: 'PlayList', params: { id: item.id }}">
           <el-card :body-style="{ padding: '0px' }">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { InfiniteScroll } from 'mint-ui';
 import {mapState ,mapMutations ,mapActions} from 'vuex';
 
 export default{
@@ -88,12 +89,13 @@ export default{
         this.banner= res.data.playlists[0];
       });
     },
+    //切换歌单类型时
     getSheets(val) {
       this.cat = val;
       this.getallSheets();
     },
+    //滚动到最底部时
     loadMore() {
-      this.loading = true;
       this.limit += 10;
       this.getallSheets();
     }

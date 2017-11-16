@@ -47,9 +47,9 @@
     <div class="music-list">
       <ul>
         <li v-for="(item,index) in rank" :key="item.id" @click="MusicPlay(item)">
-          <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
-            <div class="rank-index">
+            <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
+            <div class="rank-index" v-else>
               <h3>{{index+1}}</h3>
               <p v-if="idx == 3">↑{{item.ratio}}%</p>
               <p v-if="idx == 0">{{item.lastRank | rankChange(index)}}</p>
@@ -116,6 +116,7 @@ export default {
   },
   methods: {
     MusicPlay(item) {
+      this.$store.commit("commentType",'music');
       let arr = {
         title : item.name,
         author : item.artists[0].name,
@@ -261,6 +262,13 @@ export default {
         height:100%;
         display: flex;
         align-items: center;
+        .icon{
+          width:50px;
+          font-size:16px;
+          color:@color-red;
+          font-weight: bold;
+          text-align: center;
+        }
         .rank-index{
           width:50px;
           height:100%;

@@ -28,7 +28,7 @@
                 <a :href="musicURL" :download="musicInfo.title"><i class="fa-download"></i></a>
               </el-col>
               <el-col :span="6">
-                <router-link to="/comment">
+                <router-link :to="{ name: 'comment', params: {id: musicInfo.id, type: commentType}}">
                   <el-badge :value="comment.commentsTotal" :max="999">
                     <i class="fa-comments-o"></i>
                   </el-badge>
@@ -95,7 +95,7 @@ export default{
   },
   computed: {
     ...mapState([
-      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","comment"
+      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","comment","commentType"
     ]),
     playWidth() {
       return (this.songCurrentTime/this.songDuration)*100;
@@ -148,11 +148,10 @@ export default{
         limit: 20,
         offset: 0
       }
-      let url = this.HOST + '/comment/music'
+      let url = this.HOST + '/comment/' + this.commentType;
       this.axios.get(url,{params}).then(res => {
         this.$store.commit("addCommentsTotal",res.data.total);
         this.$store.commit("addHotComments",res.data.hotComments);
-        console.log(res.data.hotComments);
         this.$store.commit("addComments",res.data.comments);
       })
     }

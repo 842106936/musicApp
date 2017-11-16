@@ -5,17 +5,25 @@
       <p>评论（{{comment.commentsTotal}}）</p>
     </div>
     <div class="musicInfo">
-      <router-link to="/player">
+      <a v-if="commentType != 'playlist'" @click="$router.back(-1)">
         <img :src="musicInfo.pic"/>
         <p>
           <b>{{musicInfo.title}}</b>
           <em>{{musicInfo.author}}</em>
         </p>
         <i class="fa-angle-right"></i>
-      </router-link>
+      </a>
+      <a v-if="commentType == 'playlist'" @click="$router.back(-1)">
+        <img :src="playList.lists.coverImgUrl"/>
+        <p>
+          <b>{{playList.lists.name}}</b>
+          <em>{{playList.lists.description}}</em>
+        </p>
+        <i class="fa-angle-right"></i>
+      </a>
     </div>
     <div class="comments">
-      <h5>精彩评论</h5>
+      <h5 v-if="comment.hotComments.length != 0">精彩评论</h5>
       <div class="comment-list">
         <ul>
           <li v-for="item in comment.hotComments">
@@ -34,7 +42,7 @@
           </li>
         </ul>
       </div>
-      <h5>最新评论{{comment.commentsTotal}}</h5>
+      <h5 v-if="comment.commentsTotal != 0">最新评论{{comment.commentsTotal}}</h5>
       <div class="comment-list">
         <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
           <li v-for="item in comments">
@@ -69,27 +77,34 @@ export default{
   data() {
     return {
       loading:false,
+      commentID:this.$route.params.id,
+      commentType:this.$route.params.type,
       commentOffset:0
+    }
+  },
+  created() {
+    if(this.commentType != 'music'){
+      this.getComment();
     }
   },
   filters: {
     dateType(value) {
       value= +(value.toString().substr(0,10));
       var result,
-        d= new Date( value * 1000),
-       Y = d.getFullYear()+ '年',
-       M = (d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1) + '月',
-       D = d.getDate() + '日 ',
-       h = d.getHours()<10 ? '0'+ d.getHours() + ':' :  d.getHours() + ':' ,
-       m = d.getMinutes()<10? '0'+d.getMinutes() + ':': d.getMinutes() + ':',
-       s = d.getSeconds()<10 ? '0'+ d.getSeconds(): d.getSeconds();
+      d= new Date( value * 1000),
+      Y = d.getFullYear()+ '年',
+      M = (d.getMonth() + 1 < 10 ? '0' + (d.getMonth() + 1) : d.getMonth() + 1) + '月',
+      D = d.getDate() + '日 ',
+      h = d.getHours()<10 ? '0'+ d.getHours() + ':' :  d.getHours() + ':' ,
+      m = d.getMinutes()<10? '0'+d.getMinutes() + ':': d.getMinutes() + ':',
+      s = d.getSeconds()<10 ? '0'+ d.getSeconds(): d.getSeconds();
      result = Y + M + D ;
      return result;
     }
   },
   computed: {
     ...mapState([
-      "comment","musicInfo"
+      "comment","musicInfo","playList"
     ]),
     comments() {
       return this.comment.comments
@@ -116,21 +131,39 @@ export default{
       }
       // })
     },
-    loadMore() {
-      this.loading = true;
-      this.commentOffset += 1;
+    getComment() {
       let params = {
-        id: this.musicInfo.id,
+        id: this.commentID,
         limit: 20,
-        offset: this.commentOffset
+        offset: 0
       }
-      let url = this.HOST + '/comment/music'
+      let url = this.HOST + '/comment/' + this.commentType;
       this.axios.get(url,{params}).then(res => {
-        for(var i=0;i<res.data.comments.length;i++){
-          this.comments.push(res.data.comments[i]);
-        }
-        this.loading = false;
+        this.$store.commit("addCommentsTotal",res.data.total);
+        this.$store.commit("addHotComments",res.data.hotComments);
+        this.$store.commit("addComments",res.data.comments);
       })
+    },
+    loadMore() {
+      if(this.comments < this.comment.commentsTotal){
+        this.loading = true;
+        this.commentOffset += 1;
+        let params = {
+          id: this.commentID,
+          limit: 20,
+          offset: this.commentOffset
+        }
+        let url = this.HOST + '/comment/' + this.commentType;
+        this.axios.get(url,{params}).then(res => {
+          for(var i=0;i<res.data.comments.length;i++){
+            this.comments.push(res.data.comments[i]);
+          }
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+        })
+      }
     }
   }
 }

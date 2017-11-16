@@ -1,6 +1,6 @@
 <template>
   <div v-show="flag && playerShow" class="MusicPlayer">
-    <router-link class="img" to="/player">
+    <router-link class="img" :to="{ name: 'player'}">
       <img :src="songs.pic">
     </router-link>
     <div class="info">
@@ -32,7 +32,12 @@ export default{
   },
   computed: {
     ...mapState([
-      "playStatus","musicInfo","playerList","songIndex","playerShow"
+      "playStatus",
+      "musicInfo",
+      "playerList",
+      "songIndex",
+      "playerShow",
+      "commentType"
     ]),
     audio() {
       return document.querySelector('#audio')
@@ -72,10 +77,16 @@ export default{
         }
       });
       return new Promise((resolve, reject) => {
-        const params = {
-          id : this.musicInfo.id
+        let audioID = '';
+        if(this.commentType == 'dj'){
+          audioID = this.musicInfo.dj;
+        }else{
+          audioID = this.musicInfo.id;
         }
-        const url = this.HOST + "/music/url"
+        let params = {
+          id : audioID
+        }
+        let url = this.HOST + "/music/url"
         this.axios.get(url,{params}).then(res => {
           this.songs = {
             id: this.musicInfo.id,
@@ -94,12 +105,12 @@ export default{
       })
       //判断播放列表中是否已经含有点击的歌曲
       .then(() => {
-        const arr = new Array;
+        let arr = new Array;
         for(var i=0;i<this.playerList.List.length;i++){
           arr.push(this.playerList.List[i].id);
         }
         this.listID = arr;
-        const _index = this.listID.indexOf(this.musicInfo.id);
+        let _index = this.listID.indexOf(this.musicInfo.id);
         console.log(this.listID);
         if(_index == -1){
           this.$store.commit("addItemToPlayList",this.songs);
