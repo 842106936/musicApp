@@ -81,6 +81,7 @@ export default{
     MusicPlay(item) {
       let arr = {
         id:item.id,
+        dj: item.mainSong.id,
         title : item.title,
         author : item.author,
         url: item.url,
@@ -191,8 +192,10 @@ export default{
               color:#333;
               line-height:30px;
               font-style: normal;
+              display:inline-block;
             }
             em{
+              display:inline-block;
               font-size:12px;
               color:#666;
               line-height:30px;
