@@ -3,11 +3,11 @@
     <header>
       <el-row>
         <el-col :span="4" class="nav-icon left">
-          <router-link to="/Login">
+          <a @click="showUserInfo = true">
             <el-badge :value="12">
               <i class="el-icon-menu"></i>
             </el-badge>
-          </router-link>
+          </a>
         </el-col>
         <el-col :span="16" class="nav-nav">
           <el-row>
@@ -23,6 +23,7 @@
         </el-col>
       </el-row>
     </header>
+    <user-info :showUserInfo="showUserInfo" @close="close"></user-info>
     <transition :name="direction">
       <router-view class="app-view"></router-view>
     </transition>
@@ -30,9 +31,12 @@
 </template>
 
 <script>
+import userInfo from './UserInfo.vue'
+
 export default {
   data () {
     return {
+      showUserInfo:false,
       navList:[
         {Name:'我的', Link:'/Mine'},
         {Name:'音乐', Link:'/Music'},
@@ -53,7 +57,13 @@ export default {
        }
        return tranName
      }
-   }
+   },
+   components:{
+     'user-info':userInfo
+   },
+   close() {
+     this.showUserInfo=false;
+   },
 };
 </script>
 

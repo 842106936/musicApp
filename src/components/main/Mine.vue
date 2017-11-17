@@ -111,7 +111,7 @@ export default{
   methods: {
     getUserInfo() {
       let params = {
-        uid: window.localStorage.getItem("id")
+        uid: this.userId
       }
       let url = this.HOST + '/user/detail';
       this.axios.get(url,{params}).then(res => {
@@ -120,7 +120,7 @@ export default{
     },
     getPlayList() {
       let params = {
-        uid: window.localStorage.getItem("id")
+        uid: this.userId
       }
       let url = this.HOST + '/user/playlist';
       this.axios.get(url,{params}).then(res => {

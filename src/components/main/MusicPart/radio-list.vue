@@ -5,7 +5,7 @@
   </mt-cell>
   <el-row :gutter="5">
     <el-col v-if="index < showNum || showNum == true" :xs="8" :sm="8" :md="6" :lg="4" v-for="(item, index) in radioLists" :key="item.id">
-      <a @click="djDetail(item.id)">
+      <router-link :to="{ name: 'DJList', params: {id: item.id} }">
         <el-card :body-style="{ padding: '0px' }">
           <div class="image">
             <div>
@@ -14,7 +14,7 @@
           </div>
           <p class="name">{{item.name}}</p>
         </el-card>
-      </a>
+      </router-link>>
     </el-col>
   </el-row>
 </div>
@@ -37,11 +37,6 @@ export default{
     this.getRadioLists();
   },
   props:['title','id'],
-  computed:{
-    ...mapState([
-      "djInfo"
-    ])
-  },
   methods: {
     getRadioLists() {
       let params = {
@@ -51,43 +46,6 @@ export default{
       this.axios.get(url,{params}).then(res => {
         this.radioLists = res.data.djRadios;
       });
-    },
-    getDjDetail(id) {
-      //获取电台节目详情
-      let params = {
-        rid: id
-      };
-      let url = this.HOST + '/dj/detail';
-      return this.axios.get(url,{params});
-    },
-    getDjRadio(id) {
-      //获取电台节目列表
-      let params = {
-        rid: id,
-        limit: 1000
-        //limit: res.data.djRadio.programCount
-      };
-      let url = this.HOST + '/dj/program';
-      return this.axios.get(url,{params});
-    },
-    djDetail(id) {
-      this.$router.push({ name: 'DJList', params: { id: id }});
-      if(this.djInfo.djID != id){
-        Indicator.open({
-          spinnerType: 'fading-circle'
-        });
-        this.axios.all([this.getDjDetail(id),this.getDjRadio(id)]).then(this.axios.spread((res,red) => {
-          let DJ = {
-            'id': id,
-            'djRadio': res.data.djRadio,
-            'djList': red.data
-          }
-          this.$store.commit('setDJinfo',DJ);
-          Indicator.close();
-        })).catch(error => {
-          console.log(error);
-        })
-      }
     }
   }
 }

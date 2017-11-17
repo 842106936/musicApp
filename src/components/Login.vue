@@ -37,6 +37,8 @@ export default {
           if(res.data.code == 200){
             if(window.localStorage){
                 localStorage.setItem("id", res.data.account.id);
+                var str = JSON.stringify(res.data);
+                localStorage.setItem("userInfo",str);
             }else{
                 Cookie.write("id", res.data.account.id);
             }

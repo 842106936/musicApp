@@ -1,7 +1,7 @@
 <template>
   <div class="music-player-list">
     <transition name="fade">
-      <div v-if="showPlayerList" class="dialog" @click="close"></div>
+      <div v-if="showPlayerList" class="black" @click="close"></div>
     </transition>
     <transition name="up">
       <div v-if="showPlayerList" class="player-list">
@@ -80,8 +80,8 @@ export default{
     ]),
     MusicPlay(item) {
       let arr = {
-        id:item.id,
-        dj: item.mainSong.id,
+        id: item.id,
+        dj: item.dj,
         title : item.title,
         author : item.author,
         url: item.url,
@@ -99,14 +99,8 @@ export default{
 .music-player-list{
   width:100%;
   height:100%;
-  .dialog{
-    width:100%;
-    height:100%;
-    position:fixed;
-    top:0;
-    left:0;
-    background-color:rgba(0,0,0,0.3);
-    opacity:1;
+  .black{
+    .dialog;
   }
   .player-list{
     width:100%;
@@ -193,6 +187,10 @@ export default{
               line-height:30px;
               font-style: normal;
               display:inline-block;
+              max-width:70%;
+              white-space: nowrap;
+              text-overflow:ellipsis;
+              overflow: hidden;
             }
             em{
               display:inline-block;
@@ -201,6 +199,10 @@ export default{
               line-height:30px;
               font-style: normal;
               margin-left:5px;
+              max-width:30%;
+              white-space: nowrap;
+              text-overflow:ellipsis;
+              overflow: hidden;
             }
           }
           i{

@@ -22,17 +22,17 @@
       <el-row class="icon-btn">
         <el-col :span="6">
           <i class="fa-calendar-plus-o"></i>
-          <p>{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
+          <p v-if="lists.subscribedCount != 'undefind'">{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <router-link :to="{ name: 'comment', params: {id: $route.params.id, type: 'playlist'}}">
             <i class="fa-comments"></i>
-            <p>{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
+            <p v-if="lists.subscribedCount != 'undefind'">{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
           </router-link>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
-          <p>{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
+          <p v-if="lists.subscribedCount != 'undefind'">{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-download"></i>

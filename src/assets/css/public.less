@@ -20,6 +20,17 @@ img[lazy=loaded] {
   height:100%;
   animation: fade 0.5s;
 }
+
+.dialog{
+  width:100%;
+  height:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  background-color:rgba(0,0,0,0.3);
+  opacity:1;
+}
+
 @-webkit-keyframes fade {
   0% {
     opacity: 0
@@ -52,4 +63,24 @@ img[lazy=loaded] {
   -ms-transform: translateY(100%);
   -o-transform: translateY(100%);
   transform: translateY(100%);
+}
+.left-enter-active, .left-leave-active {
+    transition: all .2s;
+}
+.left-enter, .left-leave-active {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.right-enter-active, .right-leave-active {
+    transition: all .2s;
+}
+.right-enter, .right-leave-active {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
 }

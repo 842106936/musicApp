@@ -1,6 +1,8 @@
 <template>
   <div class="dj-list">
-    <div class="dj-top" :style="{'background': djBackground,'background-size': '100% 100%'} ">
+    <div class="dj-top">
+      <img :src="djBackground"/>
+      <span class="bg"></span>
       <div class="dj-head">
         <a><i class="fa-angle-left" @click="$router.back(-1)"></i></a>
         <p>电台</p>
@@ -22,7 +24,7 @@
       <p :class="{'active':djShow == 1}" @click="djShow = 1">节目<i>{{djList.count}}</i></p>
     </div>
     <div class="dj-main">
-      <transition name="silde-right">
+      <transition name="left">
       <div v-if="djShow == 0" class="dj-brief">
         <div class="dj-author">
           <h4>主播</h4>
@@ -42,8 +44,8 @@
           </div>
         </div>
         <div class="dj-comment">
-          <h4>精彩评论</h4>
-          <!-- <div class="dj-comment-list">
+          <!-- <h4>精彩评论</h4>
+           <div class="dj-comment-list">
             <ul>
               <li v-for="item in comment.hotComments">
                 <div class="user">
@@ -64,7 +66,7 @@
         </div>
       </div>
       </transition>
-      <transition name="silde-left">
+      <transition name="right">
       <div v-if="djShow == 1" class="dj-list">
         <div class="dj-list-title">
           <b>共{{djList.count}}期</b>
@@ -97,6 +99,7 @@ import { Actionsheet , Indicator} from 'mint-ui';
 export default {
   data () {
     return {
+      id:this.$route.params.id,
       djShow:1, //内容显示，0代表显示介绍，1代表显示列表
       djSort:true, //true列表降序,false列表升序
       actions:[
@@ -110,6 +113,7 @@ export default {
   },
   created() {
       //所有数据在列表页点击电台时已获取
+      this.djDetail();
   },
   filters: {
     dateType(value,model) {
@@ -146,12 +150,14 @@ export default {
       return this.djInfo.djList;
     },
     djBackground() {
-      return 'url(' + this.djRadio.picUrl + ')';
+      return this.djInfo.djRadio.picUrl;
     }
   },
   methods: {
     MusicPlay(item) {
+      //评论类型dj
       this.$store.commit("commentType",'dj');
+      //当前dj
       let arr = {
         title : item.name,
         author : item.dj.nickname,
@@ -160,6 +166,7 @@ export default {
         pic : item.coverUrl
       }
       this.$store.dispatch('musicInfo', arr);
+      //如果该电台不在播放列表则将其加入
       if(this.playerList.id.indexOf(this.djID) == -1){
         for(var i = 0; i < this.djList.programs.length; i++){
           let obj = {
@@ -174,15 +181,48 @@ export default {
         this.$nextTick(() => {
           this.$store.commit('addListID', this.djID);
           this.$store.commit('addListToPlayerList', this.List);
-          console.log(this.List);
-          console.log(this.playerList.id);
-          console.log(this.djID);
         })
       }
     },
     sortDJ() {
       this.djList.programs.reverse();
       this.djSort == false ? this.djSort = true : this.djSort = false;
+    },
+    getDjDetail() {
+      //获取电台节目详情
+      let params = {
+        rid: this.id
+      };
+      let url = this.HOST + '/dj/detail';
+      return this.axios.get(url,{params});
+    },
+    getDjRadio() {
+      //获取电台节目列表
+      let params = {
+        rid: this.id,
+        limit: 1000
+        //limit: res.data.djRadio.programCount
+      };
+      let url = this.HOST + '/dj/program';
+      return this.axios.get(url,{params});
+    },
+    djDetail() {
+      if(this.djInfo.djID != this.id){
+        Indicator.open({
+          spinnerType: 'fading-circle'
+        });
+        this.axios.all([this.getDjDetail(),this.getDjRadio()]).then(this.axios.spread((res,red) => {
+          let DJ = {
+            'id': this.id,
+            'djRadio': res.data.djRadio,
+            'djList': red.data
+          }
+          this.$store.commit('setDJinfo',DJ);
+          Indicator.close();
+        })).catch(error => {
+          console.log(error);
+        })
+      }
     }
   }
 }
@@ -206,12 +246,29 @@ export default {
     overflow:hidden;
     .dj-top{
       width:100%;
-      padding-bottom:50%;
+      padding-bottom:70%;
       position:relative;
       overflow:hidden;
+      &>img{
+        width:100%;
+        height:100%;
+        position: absolute;
+        left:0;
+        top:0;
+      }
+      &>.bg{
+        width:100%;
+        height:100%;
+        display: block;
+        position: absolute;
+        left:0;
+        top:0;
+        box-shadow:0px 0px 150px rgba(0,0,0,0.5) inset;
+      }
       .dj-head{
         width:100%;
         height:60px;
+        position: absolute;
         a{
           width:50px;
           height:100%;
@@ -262,7 +319,7 @@ export default {
             }
             &:nth-child(2) {
               font-size:12px;
-              color:#999;
+              color:#f2f2f2;
               line-height:18px;
             }
           }
@@ -368,6 +425,7 @@ export default {
         .dj-context-brief{
           width:100%;
           overflow:hidden;
+          padding-bottom:20px;
           p{
             font-size:@font-size;
             padding:0 10px;

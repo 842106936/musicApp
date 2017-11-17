@@ -71,6 +71,7 @@ export default {
         font-weight: bold;
       }
       .info{
+        width:calc(~"100% - 40px");
         .name{
           b{
             font-size:@font-size*1.1;

@@ -41,7 +41,7 @@
   </div>
 
   <div class="part-sheet">
-    <mt-cell title="推荐歌单" to="/Mine" is-link>
+    <mt-cell title="推荐歌单" to="/Music/sheet" is-link>
     </mt-cell>
     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" ref="loadmore">
     <el-row :gutter="5">
@@ -84,7 +84,7 @@
   </div>
 
   <div class="part-newmusic">
-    <mt-cell title="最新音乐" to="/Mine" is-link>
+    <mt-cell title="最新音乐" to="/Music/sheet" is-link>
     </mt-cell>
     <el-row :gutter="5">
       <el-col :xs="8" :sm="8" :md="6" :lg="4" v-for="(newmusic, index) in newmusics" :key="newmusic.id">
@@ -143,19 +143,21 @@
   </div>
 
   <div class="part-radio">
-    <mt-cell title="主播电台" to="/Mine" is-link>
+    <mt-cell title="主播电台" to="/Music/radio" is-link>
     </mt-cell>
     <el-row :gutter="5">
       <el-col :xs="8" :sm="8" :md="6" :lg="4" v-for="(radio, index) in radios" :key="radio.id">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="image">
-            <div>
-              <em>{{radio.copywriter}}</em>
-              <img v-lazy="radio.picUrl"/>
+        <router-link :to="{ name: 'DJList', params: {id: radio.program.radio.id} }">
+          <el-card :body-style="{ padding: '0px' }" >
+            <div class="image">
+              <div>
+                <em>{{radio.copywriter}}</em>
+                <img v-lazy="radio.picUrl"/>
+              </div>
             </div>
-          </div>
-          <p class="name">{{radio.name}}</p>
-        </el-card>
+            <p class="name">{{radio.name}}</p>
+          </el-card>
+        </router-link>
       </el-col>
     </el-row>
   </div>
