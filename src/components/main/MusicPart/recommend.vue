@@ -76,6 +76,7 @@
             <div>
               <img v-lazy="item.picUrl"/>
             </div>
+            <p><i class="fa-video-camera"></i></p>
           </div>
           <p class="name">{{item.name}}</p>
         </el-card>

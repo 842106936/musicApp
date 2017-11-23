@@ -6,11 +6,11 @@
     <transition name="left">
     <div v-if="showUserInfo" class="userBox" :style="boxSize">
       <div class="user-info">
-        <img class="background" :src="userInfo.profile.backgroundUrl ? '' : userInfo.profile.backgroundUrl">
-        <img class="avatar" :src="userInfo.profile.avatarUrl ? '' : userInfo.profile.avatarUrl">
+        <img class="background" :src="userInfo.profile.backgroundUrl">
+        <img class="avatar" :src="userInfo.profile.avatarUrl">
         <div class="user-info-name">
           <p v-if="userInfo.profile.nickname">{{userInfo.profile.nickname}}<i>Lv.{{userInfo.level}}</i></p>
-          <a @click="signin">{{issignin ? "<i class='fa-database'></i>签到" : "已签到"}}</a>
+          <a @click="signin()"><i v-if="!issignin" class='fa-database'></i>{{!issignin ? "签到" : "已签到"}}</a>
         </div>
       </div>
        <div class="user-control">
@@ -39,16 +39,19 @@ export default{
     return {
       issignin: false, //是否签到
       list:[
-        {icon: 'fa-github',title: 'github',link: 'https://github.com/842106936/musicApp'}
-        //{icon: '',title: '',link: ''}
+        {icon: 'fa-github',title: 'github',link: 'https://github.com/842106936/musicApp'},
+        {icon: 'fa-qq',title: '842106936',link: ''}
       ],
       boxSize:{
-        width: window.screen.availWidth * 0.8,
-        height: window.screen.availHeight
+        width: document.body.clientWidth * 0.8 + 'px',
+        height:  window.screen.availHeight + 'px'
       }
     }
   },
   props:["showUserInfo"],
+  created() {
+    this.signin();
+  },
   computed: {
     ...mapState([
       "isLogin"
@@ -61,6 +64,18 @@ export default{
   methods:{
     close() {
       this.$emit('close');
+    },
+    signin() {
+      let params = {
+        type: 0
+      }
+      let url = this.HOST + '/daily_signin';
+      this.axios.get(url,{params}).then(res => {
+        this.issignin = true;
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
   }
 }
@@ -70,14 +85,21 @@ export default{
 @import '../assets/css/public.less';
 .user{
   width:100%;
+  position: fixed;
+  left:0px;
+  top:0px;
+  z-index:9999999;
   overflow:hidden;
   .black{
     .dialog
   }
   .userBox{
+    position: relative;
+    background:#FFF;
+    z-index:999999;
     .user-info{
       width:calc(~"100% - 20px");
-      padding:10px;
+      padding:0 10px;
       height:25%;
       position:relative;
       .background{
@@ -91,24 +113,34 @@ export default{
         width:80px;
         height:80px;
         border-radius:50%;
+        position: absolute;
+        left:10px;
+        bottom:50px;
       }
       .user-info-name{
-        width:100%;
+        width:calc(~"100% - 20px");
+        padding:10px;
+        position: absolute;
+        left:0;
+        bottom:0;
         overflow:hidden;
         p{
           font-size:14px;
+          display:inline-block;
           color:#FFF;
           i{
             font-size:10px;
             color:#FFF;
+            margin-left:5px;
           }
         }
         a{
-          padding:0px 5px;
-          display:block;
+          padding:0px 10px;
+          display:inline-block;
+          float: right;
           font-size:12px;
           color:#FFF;
-          line-height:24px;
+          line-height:20px;
           border:1px solid #FFF;
           border-radius:12px;
           i{
@@ -121,21 +153,23 @@ export default{
     .user-control{
       width:100%;
       height:75%;
+      padding:10px 0;
+      box-sizing: border-box;
       background:#FFF;
       position: relative;
       li{
         width:100%;
-        padding:0 10px;
+        padding:5px 10px;
         box-sizing: border-box;
         overflow: hidden;
         a{
           font-size:14px;
           color:#333;
-          line-height:34px;
+          line-height:24px;
           i{
-            font-size:14px;
+            font-size:16px;
             color:#333;
-            line-height:34px;
+            line-height:24px;
           }
         }
       }
@@ -147,6 +181,9 @@ export default{
         line-height:34px;
         text-align: center;
         background:@color-red;
+        position: absolute;
+        left:0;
+        bottom:0;
       }
     }
   }

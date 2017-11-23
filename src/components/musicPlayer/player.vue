@@ -48,7 +48,7 @@
           <b>{{songCurrentTime | transformTime}}</b>
           <div class="player-progress">
             <div class="player-progress-download"></div>
-            <div class="player-progress-play" :style="{'width': playWidth + '%'}">
+            <div id="program" class="player-progress-play" :style="{'width': playWidth + '%'}">
               <div v-if="isBuffering" class="player-progress-loading"></div>
               <div v-if="!isBuffering" class="play-progress-btn"></div>
             </div>

@@ -3,9 +3,9 @@
     <header>
       <el-row>
         <el-col :span="4" class="nav-icon left">
-          <a @click="showUserInfo = true">
-            <el-badge :value="12">
-              <i class="el-icon-menu"></i>
+          <a @click="loginControl">
+            <el-badge :value="0">
+              <i class="fa-navicon"></i>
             </el-badge>
           </a>
         </el-col>
@@ -61,9 +61,19 @@ export default {
    components:{
      'user-info':userInfo
    },
-   close() {
-     this.showUserInfo=false;
-   },
+   methods: {
+     close() {
+       this.showUserInfo=false;
+     },
+     loginControl() {
+       let str = window.localStorage.getItem('userInfo');
+       if(str != null){
+         this.showUserInfo = true;
+       }else{
+         this.$router.push({path:'/Login'});
+       }
+     }
+   }
 };
 </script>
 
@@ -95,6 +105,10 @@ export default {
         }
         a{
           color:@font-color;
+        }
+        i{
+          color:@font-color;
+          font-size:@font-size*1.4;
         }
       }
       .nav-nav{

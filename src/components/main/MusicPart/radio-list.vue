@@ -14,7 +14,7 @@
           </div>
           <p class="name">{{item.name}}</p>
         </el-card>
-      </router-link>>
+      </router-link>
     </el-col>
   </el-row>
 </div>
