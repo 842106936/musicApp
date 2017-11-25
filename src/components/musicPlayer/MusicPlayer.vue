@@ -14,12 +14,12 @@
 
     <player-list :showPlayerList="showPlayerList" @close="close"></player-list>
 
-    <audio id="audio" :src="songs.url" controls="controls" ref="player" @ended="autoPlayNext" @loadedmetadata="songDuration" @timeupdate="songCurrentTime" @waiting="bufferingTrue" @canplay="bufferingFalse"></audio>
+    <audio id="audio" :src="songs.url" controls="controls" ref="player" @ended="autoPlayNext" @loadedmetadata="durationTime" @timeupdate="updateTime" @waiting="bufferingTrue" @canplay="bufferingFalse"></audio>
   </div>
 </template>
 
 <script>
-import {mapState ,mapMutations ,mapActions} from 'vuex';
+import {mapState ,mapGetters} from 'vuex';
 import playerList from './MusicPlayerList.vue'
 
 export default{
@@ -39,6 +39,21 @@ export default{
       "playerShow",
       "commentType"
     ]),
+    ...mapGetters([
+      "change",
+      "currentTime",
+      "tmpCurrentTime",
+      "rangeValue"
+    ]),
+    // rangeValue: {
+    //   get() {
+    //     return this.currentTime / this.durationTime * 100;
+    //   },
+    //   set(val) {
+    //     console.log(123)
+    //     this.$store.commit('setRangeValue', val)
+    //   }
+    // },
     audio() {
       return document.querySelector('#audio')
     },
@@ -138,12 +153,19 @@ export default{
       console.log("播放结束")
     },
     //音乐总时长
-    songDuration() {
-      this.$store.commit("songDuration",this.audio.duration);
+    durationTime() {
+      this.$store.commit("durationTime",this.audio.duration);
     },
     //当前播放时长
-    songCurrentTime() {
-      this.$store.commit("songCurrentTime",this.audio.currentTime);
+    updateTime() {
+      var myaudio = document.querySelector('#audio');
+      var time = parseInt(myaudio.currentTime);
+      if (this.change) {
+        myaudio.currentTime = this.tmpCurrentTime;
+        this.$store.commit('setChange', false);
+      } else {
+        this.$store.commit("currentTime", time);
+      }
     },
     //音频文件加载完成
     bufferingTrue() {

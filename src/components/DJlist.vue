@@ -20,8 +20,8 @@
     </div>
 
     <div class="dj-content">
-      <p :class="{'active':djShow == 0}" @click="djShow = 0">详情</p>
-      <p :class="{'active':djShow == 1}" @click="djShow = 1">节目<i>{{djList.count}}</i></p>
+      <p :class="{'active':djShow == 0}" @click="djShow = 0" v-pop>详情</p>
+      <p :class="{'active':djShow == 1}" @click="djShow = 1" v-pop>节目<i>{{djList.count}}</i></p>
     </div>
     <div class="dj-main">
       <transition name="left">
@@ -73,7 +73,7 @@
           <a @click="sortDJ()"><i :class="djSort ? 'fa-long-arrow-down' : 'fa-long-arrow-up'"></i>排序</a>
         </div>
         <ul class="dj-list-ul">
-          <li v-for="(item,index) in djList.programs" :key="item.id" @click="MusicPlay(item)">
+          <li v-for="(item,index) in djList.programs" :key="item.id" @click="MusicPlay(item)" v-pop>
             <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
             <p class="playlist-index" v-else>
               {{djSort ? djList.count-index : index+1}}
@@ -470,6 +470,11 @@ export default {
             color:#333;
           }
         }
+        .dj-list-ul{
+          width:100%;
+          overflow: hidden;
+          background-color:#FFF;
+        }
         li{
           width: calc(~"100% - 20px");
           overflow:hidden;
@@ -478,6 +483,8 @@ export default {
           justify-content: space-between;
           align-items: center;
           border-bottom:1px solid #e7e9e8;
+          position: relative;
+          overflow: hidden;
           .icon{
             font-size:16px;
             color:@color-red;

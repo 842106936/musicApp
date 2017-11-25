@@ -47,8 +47,10 @@ const state = {
   //播放器
   playerShow:true,
   isBuffering:false, //音频是否在缓冲状态
-  songCurrentTime: 0, //当前正在播放音频的播放时间
-  songDuration: 0, //当前正在播放音频的总时长
+  change: false,  // 判断是更改的时间还是播放的时间
+  currentTime: 0, //当前正在播放音频的播放时间
+  tmpCurrentTime: 0,
+  durationTime: 0, //当前正在播放音频的总时长
   playStatus:false, //音频是否播放
   musicInfo:[], //当前播放音乐信息
   musicURL:'',
@@ -66,10 +68,19 @@ const state = {
     comments:[] //最新评论
   }
 }
-
+const getters = {
+  change: state => state.change,
+  currentTime: state => state.currentTime,
+  durationTime: state => state.durationTime,
+  tmpCurrentTime: state => state.tmpCurrentTime,
+  rangeValue: state => {
+    return state.currentTime / state.durationTime * 100;
+  }
+}
 
 export default new Vuex.Store({
   state,
+  getters,
   mutations,
   actions
 })

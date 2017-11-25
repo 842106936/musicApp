@@ -22,17 +22,17 @@
       <el-row class="icon-btn">
         <el-col :span="6">
           <i class="fa-calendar-plus-o"></i>
-          <p v-if="lists.subscribedCount != 'undefind'">{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
+          <p v-if="lists.subscribedCount != null">{{lists.subscribedCount < 10000 ? lists.subscribedCount : parseInt(lists.subscribedCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <router-link :to="{ name: 'comment', params: {id: $route.params.id, type: 'playlist'}}">
             <i class="fa-comments"></i>
-            <p v-if="lists.subscribedCount != 'undefind'">{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
+            <p v-if="lists.subscribedCount != null">{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
           </router-link>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
-          <p v-if="lists.subscribedCount != 'undefind'">{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
+          <p v-if="lists.subscribedCount != null">{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-download"></i>
@@ -41,14 +41,17 @@
       </el-row>
     </div>
 
-    <div @click="addListToPlayerList">
+    <div class="list-title" @click="addListToPlayerList" v-pop>
       <mt-cell title="播放全部">
         <i name="icon" class="fa-play-circle"></i>
       </mt-cell>
+      <!-- <mu-appbar title="播放全部">
+        <mu-icon-button icon="fa-play-circle" slot="right"/>
+      </mu-appbar> -->
     </div>
     <div class="music-list">
       <ul>
-        <li v-for="(item,index) in plist" :key="item.id" @click="MusicPlay(item)">
+        <li v-for="(item,index) in plist" :key="item.id" @click="MusicPlay(item)" v-pop>
           <div class="info">
             <div class="playlist-index">
               <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
@@ -148,6 +151,7 @@ export default {
       if(this.playerList.id.indexOf(this.id) == -1){
         this.$store.commit('addListID', this.id);
         this.$store.commit('addListToPlayerList', this.List);
+        this.$store.dispatch('musicInfo', this.List[0]);
       }
     }
   }
@@ -241,6 +245,12 @@ export default {
       }
     }
   }
+  .list-title{
+    width:100%;
+    overflow: hidden;
+    position: relative;
+    cursor:pointer;
+  }
   .music-list{
     li{
       width: calc(~"100% - 20px");
@@ -249,6 +259,8 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      overflow: hidden;
       .info{
         width:90%;
         height:100%;

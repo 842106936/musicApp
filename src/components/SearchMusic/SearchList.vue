@@ -3,7 +3,7 @@
 
     <div class="music-list">
       <ul>
-        <li v-for="item in searchList" :key="item.id" @click="MusicPlay(item)">
+        <li v-for="item in searchList" :key="item.id" @click="MusicPlay(item)" v-pop>
           <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
           <div class="info">
             <p class="name"><b>{{item.name}}</b><em>{{item.alias[0]}}</em></p>
@@ -69,9 +69,10 @@ export default {
         font-size:16px;
         color:@color-red;
         font-weight: bold;
+        margin-right:10px;
       }
       .info{
-        width:calc(~"100% - 40px");
+        width:calc(~"100% - 50px");
         .name{
           b{
             font-size:@font-size*1.1;

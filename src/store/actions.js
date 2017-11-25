@@ -20,15 +20,6 @@ export default {
   musicPlay({state, commit}, data) {
       commit('musicPlay', data);
   },
-  searchTxt({state, commit}, data) {
-      commit('searchTxt', data);
-  },
-  historys({state, commit}, data) {
-      commit('historys', data);
-  },
-  searchList({state, commit}, data) {
-      commit('searchList', data);
-  },
   musicInfo({state,commit}, data) {
     commit('musicInfo', data);
   },

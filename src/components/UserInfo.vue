@@ -15,7 +15,7 @@
       </div>
        <div class="user-control">
          <ul>
-           <li v-for="item in list">
+           <li v-for="item in list" v-pop>
              <a :href="item.link">
                <i :class="item.icon"></i>
                {{item.title}}
@@ -40,7 +40,7 @@ export default{
       issignin: false, //是否签到
       list:[
         {icon: 'fa-github',title: 'github',link: 'https://github.com/842106936/musicApp'},
-        {icon: 'fa-qq',title: '842106936',link: ''}
+        {icon: 'fa-qq',title: '842106936',link: 'javascript://'}
       ],
       boxSize:{
         width: document.body.clientWidth * 0.8 + 'px',
@@ -49,9 +49,6 @@ export default{
     }
   },
   props:["showUserInfo"],
-  created() {
-    this.signin();
-  },
   computed: {
     ...mapState([
       "isLogin"
@@ -163,6 +160,8 @@ export default{
         box-sizing: border-box;
         overflow: hidden;
         a{
+          width:100%;
+          display: block;
           font-size:14px;
           color:#333;
           line-height:24px;

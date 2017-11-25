@@ -1,9 +1,9 @@
 <template>
   <div class="history" ref="history">
-    <div v-if="historys != ''" class="search-hot">
+    <div class="search-hot">
       <h5>热门搜索</h5>
       <div class="hot-list">
-        <a v-for="item in historys">
+        <a v-for="item in hots" @click="SetSearchTxt(item)">
           {{item}}
         </a>
       </div>
@@ -27,30 +27,30 @@ import {mapState ,mapMutations ,mapActions} from 'vuex';
 export default{
   data() {
     return {
-      hots:[],
-      his:[]
+      hots:[
+        "薛之谦","周杰伦","老街","安和桥","火影忍者","Fade","泰勒斯威芙特"
+      ]
     }
   },
   watch: {
     historys() {
       if(window.sessionStorage){
-          sessionStorage.setItem("historys", this.his);
+          sessionStorage.setItem("historys", this.historys);
       }else{
-          Cookie.write("historys", this.his);
+          Cookie.write("historys", this.historys);
       }
     }
   },
   created() {
-      this.his = window.sessionStorage.getItem("historys");
-      if(this.his != null){
-        let tempArr=this.his.split(',');
+      let history = window.sessionStorage.getItem("historys");
+      if(history != null){
+        let tempArr=history.split(',');
         let returnArr=new Array();
         let i,len=tempArr.length;
         for(i=0;i<len;i++){
-            returnArr.push(tempArr[i]);
+          returnArr.push(tempArr[i]);
         }
-        this.his = returnArr;
-        this.$store.dispatch("historys",returnArr);
+        this.$store.commit("historys",returnArr);
       }
   },
   computed: {
@@ -60,12 +60,10 @@ export default{
   },
   methods: {
     SetSearchTxt(val){
-      this.$store.dispatch("searchTxt",val);
+      this.$store.commit("searchTxt",val);
     },
     DeleteSearch(index) {
-      this.his = this.historys;
-      this.his.splice(index,1);
-      this.$store.dispatch("historys",this.his);
+      this.$store.commit("removeHistorys",index);
     }
   },
   mounted() {

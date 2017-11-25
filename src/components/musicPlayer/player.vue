@@ -45,15 +45,17 @@
 
       <div class="player-control">
         <div class="player-process">
-          <b>{{songCurrentTime | transformTime}}</b>
+          <b>{{currentTime | transformTime}}</b>
           <div class="player-progress">
-            <div class="player-progress-download"></div>
-            <div id="program" class="player-progress-play" :style="{'width': playWidth + '%'}">
+            <!-- <div class="player-progress-download"></div> -->
+            <!-- <div id="program" class="player-progress-play" :style="{'width': playRange + '%'}">
               <div v-if="isBuffering" class="player-progress-loading"></div>
               <div v-if="!isBuffering" class="play-progress-btn"></div>
-            </div>
+            </div> -->
+            <mu-slider class="player-progress-play" @change="changeTime" v-model="rangeValue"/>
+            <!-- <mt-range @change="changeTime" v-model="rangeValue"></mt-range> -->
           </div>
-          <b>{{songDuration | transformTime}}</b>
+          <b>{{durationTime | transformTime}}</b>
         </div>
         <div class="play-control">
           <div class="play-control-btn">
@@ -75,7 +77,8 @@
 </template>
 
 <script>
-import {mapState ,mapMutations ,mapActions} from 'vuex';
+import { Range } from 'mint-ui';
+import {mapState ,mapMutations ,mapGetters} from 'vuex';
 import playerList from './MusicPlayerList.vue'
 
 export default{
@@ -91,14 +94,22 @@ export default{
     }
   },
   created() {
-      this.getComment();
+    this.getComment();
   },
   computed: {
     ...mapState([
-      "musicInfo","musicURL","isBuffering","playerMode","playStatus","songCurrentTime","songDuration","comment","commentType"
+      "musicInfo","musicURL","isBuffering","playerMode","playStatus","comment","commentType"
     ]),
-    playWidth() {
-      return (this.songCurrentTime/this.songDuration)*100;
+    ...mapGetters([
+      'currentTime','durationTime',"tmpCurrentTime"
+    ]),
+    rangeValue: {
+      get() {
+        return this.currentTime / this.durationTime * 100;
+      },
+      set(val) {
+        //this.$store.commit('setRangeValue', val)
+      }
     },
     screenHeigth() {
       return window.screen.availHeight + 'px';
@@ -154,6 +165,11 @@ export default{
         this.$store.commit("addHotComments",res.data.hotComments);
         this.$store.commit("addComments",res.data.comments);
       })
+    },
+    changeTime(value) {
+      var time = (value * this.durationTime) / 100
+      this.$store.commit('changeTime', time)
+      this.$store.commit('setChange', true)
     }
   }
 }
@@ -199,6 +215,37 @@ export default{
   }
 }
 .player .el-badge__content{background-color:inherit !important; border:0px !important;}
+
+.mu-slider-track,.mu-slider-fill {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  background-color: #d43c33;
+}
+.mu-slider-thumb {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    color: #fff;
+    border-radius: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    -webkit-transition: background .45s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1),width .45s cubic-bezier(.23,1,.32,1),height .45s cubic-bezier(.23,1,.32,1);
+    transition: background .45s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1),width .45s cubic-bezier(.23,1,.32,1),height .45s cubic-bezier(.23,1,.32,1);
+    cursor: pointer;
+}
+.mu-slider.zero .mu-slider-thumb {
+    border: 2px solid #bdbdbd;
+    color: #bdbdbd;
+    background-color: #fff;
+}
+.mu-slider.active .mu-slider-thumb {
+	width:20px;
+	height:20px
+}
 </style>
 
 <style lang="less" rel="stylesheet/less" scoped>
@@ -423,15 +470,18 @@ export default{
             position: absolute;
           }
           .player-progress-play{
-            width:0%;
+            width:100%;
             padding:0 5px;
             box-sizing: border-box;
             height:6px;
-            background-color:@color-red;
             border-radius:3px;
             position: absolute;
             left:0px;
             top:0px;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            cursor: default;
             .player-progress-loading{
               position: absolute;
               right:0px;

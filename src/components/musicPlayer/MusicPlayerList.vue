@@ -109,6 +109,7 @@ export default{
     bottom:0;
     left:0;
     background:#FFF;
+    z-index:999999;
     .player-list-head{
       width:calc(~"100% - 20px");
       height:60px;

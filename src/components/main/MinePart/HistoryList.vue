@@ -12,7 +12,7 @@
     </div>
     <div class="music-list">
       <ul>
-        <li v-for="item in historys" :key="item.song.id" @click="MusicPlay(item)">
+        <li v-for="item in historys" :key="item.song.id" @click="MusicPlay(item)" v-pop>
           <div class="info">
             <p class="name"><b :class="{'active': item.song.id == musicInfo.id}">{{item.song.name}}</b></p>
             <p class="author">{{item.song.ar[0].name}}</p>

@@ -2,7 +2,7 @@
   <div class="search" ref="search">
     <div class="search-head">
       <a><i class="fa-angle-left"  @click="$router.back(-1)"></i></a>
-      <input @focus="searchShow=true" @blur="searchShow=false"  v-model="text"  placeholder="请输入您要检索的内容"/>
+      <input @focus="searchShow=true" @blur="searchShow=false" v-model="text" placeholder="请输入您要检索的内容"/>
     </div>
 
     <div v-show="text != '' && searchShow == true" class="search-suggest">
@@ -56,8 +56,7 @@ export default{
         songs:[],
         playlists:[],
         mvs:[]
-      },  //搜索建议
-      his:[]
+      } //搜索建议
     }
   },
   watch: {
@@ -68,7 +67,7 @@ export default{
       }
     },
     text() {
-      this.$store.dispatch("searchTxt",this.text);
+      this.$store.commit("searchTxt",this.text);
     }
   },
   computed: {
@@ -88,14 +87,11 @@ export default{
         this.suggest.songs = res.data.result.songs;
         this.suggest.playlists = res.data.result.playlists;
         this.suggest.mvs = res.data.result.mvs;
-        console.log(this.suggest)
       })
     },
     goSearch(val,type) {
-      this.his = this.historys;
-      if(val != this.his[0]){
-        this.his.unshift(val);
-        this.$store.dispatch("historys", this.his);
+      if(this.historys.indexOf(val) == -1){
+        this.$store.commit("addHistorys", val);
       }
       this.searchShow = false;
       let params = {
@@ -106,7 +102,7 @@ export default{
       }
       let url = this.HOST + '/search';
       this.axios.get(url,{params}).then(res => {
-        this.$store.dispatch("searchList", res.data.result.songs);
+        this.$store.commit("searchList", res.data.result.songs);
         this.$router.push({ path: '/Search/SearchList' });
       })
     }

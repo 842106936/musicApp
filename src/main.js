@@ -2,46 +2,21 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App.vue'
-import Router from 'vue-router'
+import router from './router/router'
 import store from './store'
 import API from './api'
-
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import MuseUI from 'muse-ui'
 import VueLazyLoad from 'vue-lazyload'
 import NProgress from 'nprogress'
 import BScroll from 'better-scroll'
 import './assets/font/iconfont.css'
 import './assets/font/lyicon.css'
+import vueFeedback from 'vue-feedback'
 
-import Main from './components/Main.vue'
-import Login from './components/Login.vue'
-import Show from './components/Show.vue'
-import List from './components/List.vue'
-
-import Search from './components/SearchMusic/Search.vue'
-import SearchHistory from './components/SearchMusic/SearchHistory.vue'
-import SearchList from './components/SearchMusic/SearchList.vue'
-
-import PlayList from './components/PlayList.vue'
-import RankList from './components/RankList.vue'
-import DJList from './components/DJList.vue'
-
-import Mine from './components/main/Mine.vue'
-import Music from './components/main/Music.vue'
-import Dynamic from './components/main/Dynamic.vue'
-
-import recommend from './components/main/MusicPart/recommend.vue'
-import sheet from './components/main/MusicPart/sheet.vue'
-import radio from './components/main/MusicPart/radio.vue'
-import rank from './components/main/MusicPart/rank.vue'
-
-import historyList from './components/main/MinePart/HistoryList.vue'
-
-import player from './components/musicPlayer/Player.vue'
-import comment from './components/comment/comment.vue'
 /*开启debug模式*/
 Vue.config.debug = true
 /*关闭开发模式或生产模式提醒*/
@@ -58,100 +33,62 @@ Vue.use(VueLazyLoad, {
   listenEvents: [ 'scroll', 'mouseWheel']
 });
 
-Vue.use(Router)
 Vue.use(ElementUI)
 Vue.use(Mint)
+Vue.use(MuseUI)
+Vue.use(vueFeedback)
 
 /*进度条*/
 NProgress.inc(0.2);
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false });
 
-const router = new Router({
-  mode: 'history',
-  base: __dirname,
-  linkActiveClass: 'active',
-  routes: [
-  {
-    name:'Main',
-    path: '/Main',
-    alias:'/',
-    component: Main,
-    children:[
-      {
-        name:'Mine',
-        path: '/Mine',
-        component: Mine
-      },{
-        name:'Music',
-        path: '/Music',
-        alias:'/',
-        component: Music,
-        children: [
-          {path: '/Music/recommend', alias:'/', component: recommend},
-          {path: '/Music/sheet', component: sheet},
-          {path: '/Music/radio', component: radio},
-          {path: '/Music/rank', component: rank}
-        ]
-      },{
-        name:'Dynamic',
-        path: '/Dynamic',
-        component: Dynamic
+//鼠标点击波纹效果
+Vue.directive('pop', {
+  // 当被绑定的元素插入到 DOM 中时……
+  inserted: function (el, e) {
+      var posX = el.offsetLeft,
+          posY = el.offsetTop,
+          buttonWidth = el.offsetWidth,
+          buttonHeight = el.offsetHeight;
+
+      if (buttonWidth >= buttonHeight) {
+          buttonHeight = buttonWidth;
+      } else {
+          buttonWidth = buttonHeight;
       }
-    ]
-  },
-  {
-    name:'Login',
-    path:'/Login',
-    component: Login
-  },
-  {
-    name:'Search',
-    path:'/Search',
-    component: Search,
-    children: [
-      {path:'/Search/SearchHistory', alias:'/', component: SearchHistory},
-      {path:'/Search/SearchList', component: SearchList}
-    ]
-  },
-  {
-    name: 'Show',
-    path: '/Show',
-    component: Show
-  },{
-    name: 'List',
-    path: '/List',
-    component: List
-  },
-  {
-    name: 'PlayList',
-    path: '/PlayList/:id',
-    component: PlayList
-  },
-  {
-    name: 'RankList',
-    path: '/RankList/:idx',
-    component: RankList
-  },
-  {
-    name: 'DJList',
-    path: '/DJList/:id',
-    component: DJList
-  },
-  {
-    name: 'historyList',
-    path: '/HistoryList',
-    component: historyList
-  },
-  {
-    name: 'player',
-    path: '/player',
-    component: player
-  },
-  {
-    name: 'comment',
-    path: '/comment/:id/:type',
-    component: comment
-  }]
+
+      function addClass(obj, cls){
+          var obj_class = obj.className;//获取 class 内容.
+          var blank = (obj_class != '') ? ' ' : '';//判断获取到的 class 是否为空, 如果不为空在前面加个'空格'.
+          var added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
+          obj.className = added;//替换原来的 class.
+      }
+      function removeClass(obj, cls){
+        var obj_class = ' '+obj.className+' ';//获取 class 内容, 并在首尾各加一个空格. ex) 'abc    bcd' -> ' abc    bcd '
+        obj_class = obj_class.replace(/(\s+)/gi, ' ');//将多余的空字符替换成一个空格. ex) ' abc    bcd ' -> ' abc bcd '
+        var removed = obj_class.replace(' '+cls+' ', ' ');//在原来的 class 替换掉首尾加了空格的 class. ex) ' abc bcd ' -> 'bcd '
+        removed = removed.replace(/(^\s+)|(\s+$)/g, '');//去掉首尾空格. ex) 'bcd ' -> 'bcd'
+        obj.className = removed;//替换原来的 class.
+      }
+      //鼠标点击波纹效果
+      el.onclick = function(el, event){
+        var e = event || window.event;
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+        if(this.getElementsByClassName('ripple').length == 0){
+          var newdiv=document.createElement("span");
+          this.appendChild(newdiv);
+          addClass(newdiv,"ripple");
+          this.setAttribute('style','position:relative; overflow:hidden;');
+        }
+        let ripple = this.querySelector('.ripple');
+        ripple.setAttribute('style','width:'+ buttonWidth + 'px;height:' + buttonHeight + 'px;top:' + y + 'px;left:' + x +'px;');
+        addClass(ripple,"rippleEffect");
+        setTimeout(function(){
+          removeClass(ripple,"rippleEffect");
+        },400)
+      }
+  }
 })
 
 router.beforeEach((to, from, next) => {
@@ -191,30 +128,6 @@ Vue.prototype.HOST = 'http://musicapi.leanapp.cn'
 //开发环境服务器代理（若跨域）
 // Vue.prototype.HOST = '/api'
 // Vue.prototype.HOST = '/nodeApi'
-
-// Vue.prototype.MusicPlay = function(id) {
-//   let getMusicDetail = (id) =>  {
-//     var params = {
-//       ids : id
-//     };
-//     var url = '/api/song/detail';
-//     return axios.get(url,{params});
-//   };
-//   let getMusicUrl = (id) => {
-//     var params = {
-//       id : id
-//     };
-//     var url = '/api/music/url';
-//     return axios.get(url,{params});
-//   };
-//   axios.all([getMusicDetail(id),getMusicUrl(id)]).then(axios.spread((Detail, Url) => {
-//      this.$store.dispatch('musicDetail', Detail.data);
-//      this.$store.dispatch('musicUrl', Url.data.data[0].url);
-//     // store.dispatch('MusicPlay')
-//   })).catch(error => {
-//     console.log(error);
-//   });
-// }
 
 new Vue({
   el: '#app',

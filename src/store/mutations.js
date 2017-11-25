@@ -47,6 +47,12 @@ export default {
   searchTxt(state, data) {
     state.searchTxt = data;
   },
+  addHistorys(state, val) {
+    state.historys.unshift(val);
+  },
+  removeHistorys(state, index) {
+    state.historys.splice(index,1);
+  },
   historys(state, data) {
     state.historys = data;
   },
@@ -73,13 +79,26 @@ export default {
   playerShow(state, data) {
     state.playerShow = data;
   },
+  //是否改变播放时间
+  setChange(state, flag) {
+    state.change = flag;
+  },
+  changeTime(state, time) {
+    state.tmpCurrentTime = time
+  },
+  setRangeValue({state, getters}, time) {
+    getters.rangeValue = time
+  },
   //当前正在播放音频的总时长
-  songDuration(state, data) {
-    state.songDuration = data;
+  durationTime(state, data) {
+    state.durationTime = data;
   },
   //当前正在播放音频的播放时间
-  songCurrentTime(state, data) {
-    state.songCurrentTime = data;
+  currentTime(state, data) {
+    state.currentTime = data;
+  },
+  songTmpTime(state, data) {
+    state.songTmpTime = data;
   },
   //音频是否在缓冲状态
   isBuffering(state, data) {

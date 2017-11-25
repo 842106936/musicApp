@@ -39,14 +39,14 @@
       </el-row>
     </div>
 
-    <div @click="addListToPlayerList">
+    <div class="list-title" @click="addListToPlayerList" style="cursor:pointer;"  v-pop>
       <mt-cell title="播放全部">
         <i name="icon" class="fa-play-circle"></i>
       </mt-cell>
     </div>
     <div class="music-list">
       <ul>
-        <li v-for="(item,index) in rank" :key="item.id" @click="MusicPlay(item)">
+        <li v-for="(item,index) in rank" :key="item.id" @click="MusicPlay(item)"  v-pop>
           <div class="info">
             <i class="icon fa-volume-up" v-if="item.id == musicInfo.id"></i>
             <div class="rank-index" v-else>
@@ -154,6 +154,7 @@ export default {
       if(this.playerList.id.indexOf(this.id) == -1){
         this.$store.commit('addListID', this.id);
         this.$store.commit('addListToPlayerList', this.List);
+        this.$store.dispatch('musicInfo', this.List[0]);
       }
     }
   }
@@ -243,6 +244,12 @@ export default {
         }
       }
     }
+  }
+  .list-title{
+    width:100%;
+    overflow: hidden;
+    position: relative;
+    cursor:pointer;
   }
   .music-list{
     li{
