@@ -93,7 +93,7 @@ export default{
       });
       return new Promise((resolve, reject) => {
         let audioID = '';
-        if(this.commentType == 'dj'){
+        if(this.commentType === 'dj'){
           audioID = this.musicInfo.dj;
         }else{
           audioID = this.musicInfo.id;

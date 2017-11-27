@@ -47,7 +47,7 @@
         <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
           <li v-for="item in comments">
             <div class="user">
-              <img :src="item.user.avatarUrl">
+              <img :src="item.user.avatarUrl"/>
               <p>
                 <b>{{item.user.nickname}}</b>
                 <em>{{item.time | dateType}}</em>
@@ -61,7 +61,7 @@
           </li>
         </ul>
         <p class="loadTips" v-if="loading">
-          <i class="el-icon-loading"></i>加载中...
+          <i v-if="comments.length < comment.commentsTotal" class="el-icon-loading"></i>{{comments.length < comment.commentsTotal ? "加载中..." : "没有更多了"}}
         </p>
       </div>
     </div>
@@ -77,12 +77,12 @@ export default{
   data() {
     return {
       loading:false,
-      commentID:this.$route.params.id,
-      commentType:this.$route.params.type,
-      commentOffset:0
+      commentID:this.$route.params.id,  //该评论的ID
+      commentOffset:0  //请求的评论分页索引
     }
   },
   created() {
+    //歌曲的评论在点击播放时已获取，此处不需要重复获取
     if(this.commentType != 'music'){
       this.getComment();
     }
@@ -104,13 +104,14 @@ export default{
   },
   computed: {
     ...mapState([
-      "comment","musicInfo","playList"
+      "comment","musicInfo","playList","commentType"
     ]),
     comments() {
       return this.comment.comments
     }
   },
   methods: {
+    //给评论点赞
     like(item) {
       let l = '';
       item.liked ? l = 0 : l = 1;
@@ -131,6 +132,7 @@ export default{
       }
       // })
     },
+    //获取评论
     getComment() {
       let params = {
         id: this.commentID,
@@ -139,13 +141,17 @@ export default{
       }
       let url = this.HOST + '/comment/' + this.commentType;
       this.axios.get(url,{params}).then(res => {
+        //存储评论的总数
         this.$store.commit("addCommentsTotal",res.data.total);
+        //存储热门评论
         this.$store.commit("addHotComments",res.data.hotComments);
+        //存储最新评论
         this.$store.commit("addComments",res.data.comments);
       })
     },
+    //页面下拉到底部时，若已加载评论数小于总评论数，加载下一页的评论
     loadMore() {
-      if(this.comments < this.comment.commentsTotal){
+      if(this.comments.length < this.comment.commentsTotal){
         this.loading = true;
         this.commentOffset += 1;
         let params = {
@@ -163,6 +169,8 @@ export default{
         .catch(() => {
           this.loading = false;
         })
+      }else{
+        this.loading = true;
       }
     }
   }
@@ -175,8 +183,11 @@ export default{
 .comment{
   .header{
     width:100%;
-    height:60px;
+    height:40px;
     background:@bg-color;
+    position: fixed;
+    left:0;
+    top:0;
     a{
       width:50px;
       height:100%;
@@ -193,11 +204,12 @@ export default{
       width:calc(~"100% - 50px");
       height:100%;
       float:left;
-      font:16px/60px '微软雅黑';
+      font:16px/40px '微软雅黑';
       color:#FFF;
     }
   }
   .musicInfo{
+    padding-top:40px;
     a{
       width:100%;
       height:100px;

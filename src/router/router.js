@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 
 import Main from '../components/Main.vue'
 import Login from '../components/Login.vue'
-import Show from '../components/Show.vue'
 import List from '../components/List.vue'
 
 import Search from '../components/SearchMusic/Search.vue'
@@ -78,10 +77,6 @@ const router = new VueRouter({
     ]
   },
   {
-    name: 'Show',
-    path: '/Show',
-    component: Show
-  },{
     name: 'List',
     path: '/List',
     component: List
@@ -115,7 +110,15 @@ const router = new VueRouter({
     name: 'comment',
     path: '/comment/:id/:type',
     component: comment
-  }]
+  }],
+  //让页面滚动到顶部,第三个参数(history模式下) savedPosition 当且仅当 popstate 导航 (通过浏览器的 前进/后退 按钮触发) 时才可用
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
 
 export default router

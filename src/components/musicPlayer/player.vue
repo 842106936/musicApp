@@ -11,37 +11,40 @@
         <a><i class="fa-share-alt"></i></a>
       </div>
 
-      <transition name="fade">
-        <div v-if="!playerLyricShow" class="player-animation" :style="screenHeight">
-          <div class="player-picshow">
-            <div class="player-animation-gan" :class="{'pausing':!playStatus}"></div>
-            <div class="player-animation-pan" :class="{'pausing':!playStatus}">
-              <img :src="musicInfo.pic"/>
+      <div class="player-box">
+        <transition-group name="fade">
+          <div v-show="!playerLyricShow" @click="playerLyricShow = true" class="player-animation" :style="screenHeight" v-cloak key="1">
+            <div class="player-picshow">
+              <div class="player-animation-gan" :class="{'pausing':!playStatus}"></div>
+              <div class="player-animation-pan" :class="{'pausing':!playStatus}">
+                <img :src="musicInfo.pic"/>
+              </div>
+            </div>
+            <div class="songsInfo">
+              <el-row :gutter="5">
+                <el-col :span="6">
+                  <i class="fa-heart" :style="{'color': fontcolor}" @click="likeSong"></i>
+                </el-col>
+                <el-col :span="6">
+                  <a :href="musicURL" :download="musicInfo.title"><i class="fa-download"></i></a>
+                </el-col>
+                <el-col :span="6">
+                  <router-link :to="{ name: 'comment', params: {id: musicInfo.id, type: commentType}}">
+                    <el-badge :value="comment.commentsTotal" :max="999">
+                      <i class="fa-comments-o"></i>
+                    </el-badge>
+                  </router-link>
+                </el-col>
+                <el-col :span="6">
+                  <i class="fa-ellipsis-v"></i>
+                </el-col>
+              </el-row>
             </div>
           </div>
-          <div class="songsInfo">
-            <el-row :gutter="5">
-              <el-col :span="6">
-                <i class="fa-heart" :style="{'color': fontcolor}" @click="likeSong"></i>
-              </el-col>
-              <el-col :span="6">
-                <a :href="musicURL" :download="musicInfo.title"><i class="fa-download"></i></a>
-              </el-col>
-              <el-col :span="6">
-                <router-link :to="{ name: 'comment', params: {id: musicInfo.id, type: commentType}}">
-                  <el-badge :value="comment.commentsTotal" :max="999">
-                    <i class="fa-comments-o"></i>
-                  </el-badge>
-                </router-link>
-              </el-col>
-              <el-col :span="6">
-                <i class="fa-ellipsis-v"></i>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-        <!-- <Lyric></Lyric> -->
-      </transition>
+          <Lyric @closeLyric="closeLyric" v-show="playerLyricShow" key="2"></Lyric>
+        </transition-group>
+      </div>
+
 
       <div class="player-control">
         <div class="player-process">
@@ -79,7 +82,8 @@
 <script>
 import { Range } from 'mint-ui';
 import {mapState ,mapMutations ,mapGetters} from 'vuex';
-import playerList from './MusicPlayerList.vue'
+import playerList from './MusicPlayerList.vue';
+import Lyric from './lyric.vue';
 
 export default{
   name:'player',
@@ -124,7 +128,8 @@ export default{
     }
   },
   components:{
-    'player-list':playerList
+    'player-list': playerList,
+    'Lyric': Lyric
   },
   methods: {
     ...mapMutations([
@@ -170,6 +175,9 @@ export default{
       var time = (value * this.durationTime) / 100
       this.$store.commit('changeTime', time)
       this.$store.commit('setChange', true)
+    },
+    closeLyric() {
+      this.playerLyricShow = false
     }
   }
 }
@@ -361,9 +369,18 @@ export default{
         }
       }
     }
+    .player-box{
+      width:100%;
+      height:calc(~"100% - 180px");
+      overflow:hidden;
+      position: relative;
+    }
     .player-animation{
       width:100%;
-      position: relative;
+      height:100%;
+      position: absolute;
+      left:0;
+      top:0;
       .player-picshow{
         width:100%;
         height:calc(~"100% - 40px");

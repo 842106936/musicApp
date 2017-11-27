@@ -63,11 +63,11 @@ export default {
       this.$store.dispatch('musicInfo', arr);
     },
     getHistorys() {
-      const params = {
+      let params = {
         uid: window.localStorage.getItem("id"),
         type: 1
       }
-      const url = this.HOST + '/user/record';
+      let url = this.HOST + '/user/record';
       this.axios.get(url,{params}).then(res => {
         this.historys = res.data.weekData;
 

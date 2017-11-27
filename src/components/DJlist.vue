@@ -184,6 +184,7 @@ export default {
         })
       }
     },
+    //电台列表排序
     sortDJ() {
       this.djList.programs.reverse();
       this.djSort == false ? this.djSort = true : this.djSort = false;

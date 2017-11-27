@@ -1,7 +1,5 @@
 <template>
-<div>2222222222222222</div>
+  <div class="showPart">
+    这里空空如野~~
+  </div>
 </template>
-
-<script>
-
-</script>

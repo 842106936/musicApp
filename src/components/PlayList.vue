@@ -85,19 +85,19 @@ export default {
         {name:'收藏到歌单',method:''},
         {name:'下载',method:''}
       ],
-      id:this.$route.params.id,
       List:[]
     }
   },
   created() {
-      if(this.listsID != this.id){
-        Indicator.open({
-          spinnerType: 'fading-circle'
-        });
-        this.getPlaylist();
-      }
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      });
+      this.getPlaylist();
   },
   computed: {
+    id(){
+      return this.$route.params.id
+    },
     ...mapState([
       'musicInfo',"playerList","playList"
     ]),
@@ -113,13 +113,13 @@ export default {
   },
   methods: {
     MusicPlay(item) {
-      this.$store.commit("commentType",'music');
       let arr = {
         title : item.name,
         author : item.ar[0].name,
         id : item.id,
         pic : item.al.picUrl
       }
+      this.$store.commit("commentType",'music');
       this.$store.dispatch('musicInfo', arr);
     },
     getPlaylist() {
@@ -148,6 +148,7 @@ export default {
       });
     },
     addListToPlayerList(){
+      this.$store.commit("commentType",'music');
       if(this.playerList.id.indexOf(this.id) == -1){
         this.$store.commit('addListID', this.id);
         this.$store.commit('addListToPlayerList', this.List);

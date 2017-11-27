@@ -87,12 +87,10 @@ export default {
     }
   },
   created() {
-    if(this.ranksID != this.idx){
       Indicator.open({
         spinnerType: 'fading-circle'
       });
       this.getRanks();
-    }
   },
   filters: {
     rankChange(num,index) {
@@ -151,6 +149,7 @@ export default {
       });
     },
     addListToPlayerList(){
+      this.$store.commit("commentType",'music');
       if(this.playerList.id.indexOf(this.id) == -1){
         this.$store.commit('addListID', this.id);
         this.$store.commit('addListToPlayerList', this.List);
