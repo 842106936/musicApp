@@ -26,7 +26,7 @@ import { Actionsheet , Indicator} from 'mint-ui';
 import {mapState ,mapMutations ,mapActions} from 'vuex';
 
 export default{
-  name: 'radios',
+  name: 'radios-list',
   data() {
     return {
       radioLists:[],

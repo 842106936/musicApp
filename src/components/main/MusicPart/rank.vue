@@ -31,7 +31,7 @@ import official from './rank-official-list';
 import wolrd from './rank-world-list';
 
 export default{
-  name: 'radios',
+  name: 'rank',
   data() {
     return {
       officialIdx:[3,0,2,1,4],
