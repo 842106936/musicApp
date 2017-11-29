@@ -27,12 +27,12 @@
         <el-col :span="6">
           <router-link :to="{ name: 'comment', params: {id: $route.params.id, type: 'playlist'}}">
             <i class="fa-comments"></i>
-            <p v-if="lists.subscribedCount != null">{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
+            <p v-if="lists.commentCount != null">{{lists.commentCount < 10000 ? lists.commentCount : parseInt(lists.commentCount/10000) + '万'}}</p>
           </router-link>
         </el-col>
         <el-col :span="6">
           <i class="fa-share-alt"></i>
-          <p v-if="lists.subscribedCount != null">{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
+          <p v-if="lists.shareCount != null">{{lists.shareCount < 10000 ? lists.shareCount : parseInt(lists.shareCount/10000) + '万'}}</p>
         </el-col>
         <el-col :span="6">
           <i class="fa-download"></i>
@@ -234,6 +234,13 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        a{
+          display: block;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
         i{
           font-size:@font-size*1.6;
           color:#FFF;

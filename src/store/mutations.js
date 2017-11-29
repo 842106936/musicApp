@@ -174,5 +174,8 @@ export default {
   //最新评论
   addComments(state, data) {
     state.comment.comments = data;
+  },
+  mvId(state, data) {
+    state.mvId = data;
   }
 }

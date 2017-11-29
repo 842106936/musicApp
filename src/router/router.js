@@ -27,6 +27,8 @@ import historyList from '../components/main/MinePart/HistoryList.vue'
 import player from '../components/musicPlayer/Player.vue'
 import comment from '../components/comment/comment.vue'
 
+import mvPlayer from '../components/mvPlayer/mvPlayer.vue'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -110,6 +112,10 @@ const router = new VueRouter({
     name: 'comment',
     path: '/comment/:id/:type',
     component: comment
+  },{
+    name: 'mvPlayer',
+    path: '/mvPlayer',
+    component: mvPlayer
   }],
   //让页面滚动到顶部,第三个参数(history模式下) savedPosition 当且仅当 popstate 导航 (通过浏览器的 前进/后退 按钮触发) 时才可用
   scrollBehavior (to, from, savedPosition) {

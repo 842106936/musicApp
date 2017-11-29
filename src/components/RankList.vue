@@ -232,6 +232,13 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        a{
+          display: block;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }  
         i{
           font-size:@font-size*2;
           color:#FFF;

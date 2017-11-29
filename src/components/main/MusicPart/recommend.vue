@@ -71,7 +71,8 @@
     </mt-cell>
     <el-row :gutter="5">
       <el-col v-for="(item, index) in soles" :span="index==2 ? 24 : 12" :key="item.id">
-        <el-card :body-style="{ padding: '0px' }" @click="goPlayer(item)">
+        <a>
+        <el-card :body-style="{ padding: '0px' }">
           <div class="image">
             <div>
               <img v-lazy="item.picUrl"/>
@@ -80,6 +81,7 @@
           </div>
           <p class="name">{{item.name}}</p>
         </el-card>
+      </a>
       </el-col>
     </el-row>
   </div>
@@ -109,16 +111,18 @@
     </mt-cell>
     <el-row :gutter="5">
       <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(mv, index) in mvs" :key="mv.id">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="image">
-            <div>
-              <img v-lazy="mv.picUrl"/>
+        <a @click="goPlayer(mv.id)">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="image">
+              <div>
+                <img v-lazy="mv.picUrl"/>
+              </div>
+              <p><i class="fa-video-camera"></i>{{mv.playCount < 10000 ? mv.playCount : parseInt(mv.playCount/10000) + '万'}}</p>
             </div>
-            <p><i class="fa-video-camera"></i>{{mv.playCount < 10000 ? mv.playCount : parseInt(mv.playCount/10000) + '万'}}</p>
-          </div>
-          <p class="name">{{mv.name}}</p>
-          <p class="author">{{mv.artists[0].name}}</p>
-        </el-card>
+            <p class="name">{{mv.name}}</p>
+            <p class="author">{{mv.artists[0].name}}</p>
+          </el-card>
+        </a>
       </el-col>
     </el-row>
   </div>
@@ -253,15 +257,9 @@ export default{
       });
     },
     //独家放送MV播放
-    goPlayer(item) {
-      // let song = {
-      //   id: item.id,
-      //   title: item.name,
-      //   author: "",
-      //   pic: item.picUrl
-      // }
-      // this.$store.dispatch('musicInfo', song);
-      // this.$router.push({ path:'/player' });
+    goPlayer(id) {
+      this.$store.commit('mvId', id);
+      this.$router.push({ path:'/mvPlayer'});
     },
     //获取最新音乐
     getNewmusics() {

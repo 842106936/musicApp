@@ -66,7 +66,8 @@ const state = {
     commentsTotal:'', //评论数
     hotComments:[], //热门评论
     comments:[] //最新评论
-  }
+  },
+  mvId:''
 }
 const getters = {
   change: state => state.change,
