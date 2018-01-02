@@ -57,7 +57,8 @@ export default {
       margin-left:15px;
       p{
         width:100%;
-        font-size:@font-size*1.1;
+        font-size:14px;
+        line-height:16px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

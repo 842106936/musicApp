@@ -4,6 +4,7 @@
     <i @click="showNum == true ? showNum= 3 : showNum =true" :class="showNum == true ? 'fa-angle-up' : 'fa-angle-down'"></i>
   </mt-cell>
   <el-row :gutter="5">
+    <transition-group name="list">
     <el-col v-if="index < showNum || showNum == true" :xs="8" :sm="8" :md="6" :lg="4" v-for="(item, index) in radioLists" :key="item.id">
       <router-link :to="{ name: 'DJList', params: {id: item.id} }">
         <el-card :body-style="{ padding: '0px' }">
@@ -16,6 +17,7 @@
         </el-card>
       </router-link>
     </el-col>
+    </transition-group>
   </el-row>
 </div>
 </div>
@@ -52,7 +54,9 @@ export default{
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
-  @import '../../../assets/css/public.less';
+@import '../../../assets/css/animate.less';
+@import '../../../assets/css/public.less';
+
   .part-radio{
     width:100%;
     .el-row{

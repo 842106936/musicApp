@@ -100,6 +100,11 @@ export default{
   created() {
     this.getComment();
   },
+  watch: {
+    musicInfo() {
+      this.getComment();
+    }
+  },
   computed: {
     ...mapState([
       "musicInfo","musicURL","isBuffering","playerMode","playStatus","comment","commentType"

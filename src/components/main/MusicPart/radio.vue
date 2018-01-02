@@ -54,6 +54,7 @@ export default{
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import '../../../assets/css/animate.less';
   @import '../../../assets/css/public.less';
   @red:rgba(255,0,0,0.4);
   @blue:rgba(0,0,255,0.4);

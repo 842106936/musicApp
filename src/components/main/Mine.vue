@@ -189,7 +189,8 @@ export default{
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            font-size:@font-size*1.1;
+            font-size:14px;
+            line-height:16px;
             font-weight:bold;
           }
           .trackCount{

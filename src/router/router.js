@@ -32,7 +32,7 @@ import mvPlayer from '../components/mvPlayer/mvPlayer.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: __dirname,
   linkActiveClass: 'active',
   routes: [
